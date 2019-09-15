@@ -1,40 +1,40 @@
 # GUIButton
 
 ## new GUIButton(id, options, guimanager, callback, append)
-Creates a new GUIButton
+Создает новый GUIButton
 
-#### Parameters
-Name | Type | Description
+#### параметры
+Имя | Тип | Описание
 ---|---|---
-**id** | string | The id and name element
-**options** | json | Options of element
-**guimanager** | GUIManager | The gui manager
-**callback** | function | Trigger function by click (optional)
-**append** | bool | is added to the &lt;body&gt;. =&gt; True by default (optional)
+**id** | string | id и имя элемента
+**options** | json | опции элемента
+**guimanager** | GUIManager | gui менеджер
+**callback** | function | Trigger - функция по клику (опционально)
+**append** | bool | добавляется в &lt;body&gt;. =&gt; True по дефолту (опционально)
 ---
 
-## Options
+## Параметры
 
-* **w**: width of button (in pixel)
-* **h**: height of button (in pixel)
-* **x**: position left of button (in pixel)
-* **y**: position top of button (in pixel)
+* **w**: ширина кнопки (в пикселях)
+* **h**: высота кнопки (в пикселях)
+* **x**: положение кнопки слева (в пикселях)
+* **y**: положение кнопки сверху (в пикселях)
 * **value**: value text button (string) =&gt; "Ok" by default
-* **backgroundImage**: image background of button (string) =&gt; null by default
-* **backgroundColor**: color background of button (string) =&gt; "rgba(0.5, 0.5, 0.5, 0.6)" by default
-* **borderRadiusButton**: radius border of button (string)  =&gt; "10px" by default
-* **borderButton**: border of button (string)  =&gt; "2px solid black" by default
-* **colorText**: color text of button (string)  =&gt; "black" by default
+* **backgroundImage**: image background кнопки (string) =&gt; null by default
+* **backgroundColor**: color background кнопки (string) =&gt; "rgba(0.5, 0.5, 0.5, 0.6)" by default
+* **borderRadiusButton**: radius border кнопки (string)  =&gt; "10px" by default
+* **borderButton**: border кнопки (string)  =&gt; "2px solid black" by default
+* **colorText**: color text кнопки (string)  =&gt; "black" by default
 * **zIndex**: depth of the element (int) =&gt; 1 by default
 * **tabindex**: Tab order of the field.
 
-## Methods
+## методы
 
 ### setVisible(bool, fade) → void
-Set this GUI element to visible or invisible
+Делает этот GUI element видимым или невидимым
 
 ### isVisible() → void
-Returns element if is visible or no
+Возвращает виден элемент или нет
 
 ### dispose() → void
-Dispose the GUIButton, and delete element.
+Удаляет GUIButton и удаляет элемент.

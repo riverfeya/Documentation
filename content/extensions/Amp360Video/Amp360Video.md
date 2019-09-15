@@ -1,21 +1,21 @@
 # Azure Media Player 360 Video Plugin
 
 ## Introduction 
-The [Azure media player](http://amp.azure.net/libs/amp/latest/docs/index.html) 360 Video is a plugin for AMP (aka [Azure media player](http://amp.azure.net/libs/amp/latest/docs/index.html)) using Babylon.js in order to facilitate the integration of 360 videos in your Web App.
+The [Azure media player](http://amp.azure.net/libs/amp/latest/docs/index.html) 360 Video это плагин для AMP (aka [Azure media player](http://amp.azure.net/libs/amp/latest/docs/index.html)) с помощью Babylon.js чтобы облегчить интеграцию 360 видео в вашем Web App.
 
-The plugin natively supports VR headsets (Windows Mixed Reality, etc.).
+Плагин изначально поддерживает VR headsets (Windows Mixed Reality, etc.).
 
-[Online Demo of the plugin](http://www.babylonjs.com/Demos/Amp360Video/)
+[Онлайн демо плагина](http://www.babylonjs.com/Demos/Amp360Video/)
 
-## How to Run Locally
-First, clone the Babylon.js extensions repository:
+## Как запустить локально
+Первое, слонируйте реппозиторий Babylon.js extensions:
 ```
 git clone https://github.com/BabylonJS/Extensions.git
 ```
 
-Once the repository has been cloned, open a command prompt in the Amp360Video folder.
+После того, как реппозиторий клонирован, откройте командную строку в папке Amp360Video.
 
-Then, type the following commands:
+Затем введите следующие команды:
 ```
 npm install
 npm start

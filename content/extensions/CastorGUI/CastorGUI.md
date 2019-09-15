@@ -1,6 +1,6 @@
 # CastorGUI V1.5
 
-Library to display a GUI game as a layer on top of the canvas HTML/CSS.
+Библиотека для отображения GUI игрs как слой поверх холста HTML/CSS.
 
 * [Demo online of this extension](http://www.babylon.actifgames.com/demoCastorGUI/)
 * [Tutorial](https://github.com/BabylonJS/Extensions/tree/master/CastorGUI)
@@ -8,33 +8,33 @@ Library to display a GUI game as a layer on top of the canvas HTML/CSS.
 
 ## Features:
 
-Select or create themes.
+Выберите или создайте темы.
 
-Create GUI (element html5 and css3):
-* texture
-* text
-* label
-* window draggable (with title & button close)
-* dialog (with button close)
-* panel (simple dialog without button close)
-* button
-* slider
-* progress
-* meter (jauge de measure)
-* select color (with compatitility IE and Edge)
-* spinner
-* radio button
-* checkbox
+Создание GUI (элемент html5 и css3):
+* texture (текстуры)
+* text (текст)
+* label (метки)
+* window draggable (with заголовком и кнопкой close)
+* dialog (с кнопкой close)
+* panel (простой dialog без кнопки close)
+* button (кнопка)
+* slider (слайдер)
+* progress (прогресс-бар)
+* meter (измерительный прибор)
+* select color (совместимый с IE и Edge)
+* spinner (спинер)
+* radio button (радио-кнопка)
+* checkbox 
 * textfield
 * textarea
 * fieldset
 * select with options
 
-## Quick overview of use
+## Краткий обзор использования
 
-We must create a GUIManager that allows to recover the origin of the canvas and provides other basic thing.
-A GUIManager can have a CSS that Formatted anything you want to customize your GUI.
-You can also options to add a theme in the third parameter.
+Мы должны создать GUIManager, который позволяет восстановить origin холста и предоставляет другие основные вещи.
+GUIManager может иметь CSS, который отформатирует все, что вы хотите настроить в своем графическом интерфейсе.
+Также можно варианты добавить тему в третий параметр.
 
 ```javascript
 var canvas = document.getElementById("game");
@@ -42,7 +42,7 @@ var css = "button {cursor:pointer;}";
 var options = {themeRoot: "../style/", themeGUI: "default"};
 var guisystem = new CASTORGUI.GUIManager(canvas, css, options);
 ```
-Then we create interfaces items. eg textures and dialog with text:
+Затем мы создаем элементы интерфейса. например, текстуры и диалог с текстом:
 
 ```javascript
 var myFunction = function() { alert("Yes, this work!"); };
@@ -55,4 +55,4 @@ dialog.setVisible(true);
 var text = new CASTORGUI.GUIText("textDialog", {size:15, text:"Display text here"}, guisystem, false);
 dialog.add(text);
 ```
-That's it. Everything works the same way with the same simplicity.
+Это все. Все работает одинаково с одинаковой простотой.

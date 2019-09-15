@@ -2,7 +2,7 @@
 
 ![](http://www.babylonjs.com/img/layout/logo-babylonjs-v3.svg)
 
-Welcome on the repository of the official documentation of [Babylon.js](http://www.babylonjs.com).
+Добро пожаловать в репозиторий официальной документации [Babylon.js](http://www.babylonjs.com).
 
 ## How to contribute
 You can find all the information required to contribute to the documentation right here:

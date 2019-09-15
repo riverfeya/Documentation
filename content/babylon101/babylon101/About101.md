@@ -4,23 +4,23 @@ PG_TITLE: About the Course
 
 # The Course
 
-The Babylon 101 course will lead you on a step by step journey to produce scenes that use some of the basic features of the Babylon Engine. There will be references for more details at each stage.
+Курс Babylon 101 проведет вас шаг за шагом по созданию сцены которая использует некоторые базовые возможности движка Babylon . Там будут ссылки для более подробной информации на каждом этапе.
 
-So you can get started without any fuss the course starts out with the [First Step](/babylon101/First) by showing you how to use the Playground to create a scene. Throughout the course you will find examples built in the Playground ready for you to explore and edit. You can of course write your own code in the Playground, just click on the NEW button, edit and write your code and hit the RUN button. 
+Таким образом, вы можете начать без суеты, курс начинается с [First Step](/babylon101/First) показывая вам, как использовать Playground для создания сцены. На протяжении всего курса вы найдете примеры, встроенные в Playground готовые для вас, чтобы исследовать и редактировать. Конечно, вы можете написать свой собственный код в Playground, просто нажмите на кнопку NEW, отредактируйте и напишите свой код и нажмите кнопку RUN. 
 
-In this [playground example](https://www.babylonjs-playground.com/#K6M44R#1) you will see that this scene contains a camera, lights and a sphere. A sphere being one of the shapes readily available for you to add into your scene. Many more shapes, or meshes as they should be called, are available for you to easily create. In addition to the well known fixed shapes such as boxes, sphere and cylinders it is also possible to create shapes using techniques such as extrusion and lathing. The next two steps of the course show how to add some of these.
+Здесь[playground example](https://www.babylonjs-playground.com/#K6M44R#1) вы увидите, что эта сцена содержит камеру, источники света и сферу. Сфера, являющаяся одной из форм, легко доступных для добавления в сцену. Вы можете легко создать множество других фигур или сеток, как их следует называть. В дополнение к хорошо известным фиксированным формам, таким как коробки, сферы и цилиндры, также возможно создавать формы с использованием таких технологий, как экструзия и тело вращения. Следующие два шага курса показывают, как добавить некоторые из них.
 
-Having added shapes to your scene you will want to know how to position and rotate them so that is next. So far the shapes are all bland and grey so next it is onto adding color and texture to the meshes in the form of materials.
+Добавив фигуры к вашей сцене, вы захотите узнать, как расположить и повернуть их так, чтобы это было дальше. До сих пор все формы были мягкими и серыми, так что теперь мы добавили цвет и текстуру к мешам в виде материалов.
 
-How do you want to view your scene, from a distance orbiting around it or do you want to immerse yourself into it and do a walkthrough as in a first person shooter? Choose the correct camera and you choose your view, just move onto the next step to see how this is done. The way you light a scene can affect the atmosphere. Checkout the range of lights by moving onto the next section.
+Как вы хотите увидеть свою сцену с орбиты вокруг нее, или вы хотите погрузиться в нее и сделать проход, как в шутере от первого лица? Выберите правильную камеру, и вы выбираете свой вид, просто перейдите к следующему шагу, чтобы увидеть, как это делается. То, как вы освещаете сцену, может повлиять на атмосферу. Проверьте диапазон источников света, перейдя к следующему разделу.
 
-Starter steps completed and you are walking tall so now is the time for some dynamism. Get those elements of your scene animated but watch out for collisions between the camera and a mesh and between meshes themselves. Or perhaps you want the mouse pointer to collide with a mesh so you can pick it. All possible by following the next set of steps. Want to know if one mesh is in the line of sight of another or if they are on a straight path to collision? Cast a ray and see what it hits.
+Первые шаги завершены, и вы идете дальше, так что сейчас время для некоторого динамизма. Анимируйте эти элементы своей сцены, но следите за столкновениями между камерой и мешем и между самими мешами. Или, возможно, вы хотите, чтобы указатель мыши сталкивался с мешем, чтобы вы могли выбрать его. Все возможно, следуя следующих шагов. Хотите знать, находится ли один меш в зоне прямой видимости другого или они находятся на прямом пути к столкновению? Отбросьте луч и посмотрите, что он попадает.
 
-Sometimes all it takes to enliven your scene is a simple animated 2D character in your scene, so the next step will introduce you to sprites and sprite animation. Sprites can also be used to form particles to produce effects such as fire, smoke, glitter and faery dust. Learning about particles is next.
+Иногда все, что нужно для оживления вашей сцены - это простой анимированный 2D персонаж в вашей сцене, поэтому следующий шаг познакомит вас со спрайтами и спрайтовой анимацией. Спрайты также могут быть использованы для формирования частиц для создания таких эффектов, как огонь, дым, блеск и фейерная пыль. Изучение частиц будет следующим.
 
-Other improvements to your scene environment are next. They include adding sky or fog to your scene followed by enhancing the landscape by producing a ground with hills and valleys and finally how about some shadows for those meshes helping to anchor them to the ground.
+Другие улучшения в вашей сцене следующие. Они включают в себя добавление неба или тумана в вашу сцену с последующим улучшением ландшафта путем создания земли с холмами и долинами и, наконец, как насчет теней для тех сеток, которые помогают закрепить их на земле.
 
-# Next
+# дальше
 
 [Take the First Step](/babylon101/First)
 
