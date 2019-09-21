@@ -1,10 +1,10 @@
 ## Introduction
 
-This document will describe all the ways you can use to get access to Babylon.js.
+В этом документе будут описаны все способы, которыми вы можете воспользоваться, чтобы получить доступ к Babylon.js.
 
 ## CDN
 
-Babylon.js can be downloaded or used from our CDN using the following URLs:
+Babylon.js можно загрузить или использовать с нашего CDN, используя следующие URL:
 
 ### Stable version
 

@@ -4,20 +4,19 @@ PG_TITLE: 11. Intersect Collisions - mesh
 ---
 # Mesh Collisions
 
-In dynamic scenes, objects are moving and interacting with each other. To get the best rendering, you will want to know when your meshes are in contact with each other. In this tutorial, we are going to discover how the collision system works.
+В динамических сценах объекты движутся и взаимодействуют друг с другом. Чтобы получить лучший рендеринг, вам нужно знать, когда ваши сетки находятся в контакте друг с другом. В этом уроке мы узнаем, как работает система столкновений.
 
 ![Collisions](/img/how_to/Collisions%20Intersect/10.png)
 
 _Final result_
 
-## How can I do this ?
+## Как я могу это сделать ?
 
-This tutorial is going to show you two ways of collision detection: the first one is to raise a collision event when two meshes are in contact, the other one is detecting contact between a mesh and a single point.
-
-We are going to talk about the scene above. The first and second sphere (balloon) will collide on the rotated ground, the last one will be in collision only on a single point. Once you have created this basic scene, continue reading to learn how to check collisions.
+Из этого туториала вы узнаете два способа обнаружения столкновений: первый - вызвать событие столкновения, когда две сетки находятся в контакте, а другой - обнаружение контакта между сеткой и одной точкой.
+Мы будем говорить о сцене выше. Первая и вторая сферы (воздушный шар) будут сталкиваться на повернутой земле, последняя будет сталкиваться только в одной точке. Создав эту базовую сцену, продолжайте чтение, чтобы узнать, как проверять столкновения.
 
 * **Intersect mesh**
-  The point here is to check contact between our balloons and the ground. We will use the “intersectsMesh()” function, with two parameters: the mesh to be checked, and the precision of the intersection (boolean).
+  Суть в том, чтобы проверить контакт между нашими воздушными шарами и землей. Мы будем использовать функцию «intersectsMesh ()» с двумя параметрами: проверяемая сетка и точность пересечения (логическое значение).
 
   ```javascript
   if (balloon1.intersectsMesh(plan1, false)) {
@@ -27,20 +26,20 @@ We are going to talk about the scene above. The first and second sphere (balloon
   }
   ```
 
-  To avoid costly calculation by checking many details on a mesh, Babylon engine creates a bounding box around the object, and tests for intersection between this box, and the colliding mesh. Here is an example of a bounding box:
+  Чтобы избежать дорогостоящих вычислений путем проверки множества деталей на сетке, движок Babylon создает ограничивающую рамку вокруг объекта и проверяет пересечение между этой рамкой и сталкивающейся сеткой. Вот пример ограничительной рамки (bounding box):
 
   ![Collisions](/img/how_to/Collisions%20Intersect/10-1.png)
 
-  But this bounding box can be more or less precise, and that’s why we have our second parameter. In short, if this parameter is set to true (false by default), then the bounding box is closer to the mesh (OBB bounding type), but it’s a more costly calculation. Be aware that this type of bounding box is especially useful when your mesh is rotated to an angle.
+  Но эта ограничительная рамка может быть более или менее точной, и поэтому у нас есть второй параметр. Короче говоря, если для этого параметра установлено значение true (по умолчанию false), ограничивающий прямоугольник будет ближе к сетке (тип ограничения OBB), но это более затратный расчет. Имейте в виду, что этот тип ограничивающего прямоугольника особенно полезен, когда ваша сетка повернута на угол.
 
   ![Collisions](/img/how_to/Collisions%20Intersect/10-2.png)
 
-  So think about the collisions details you need before to choose.
+  Так что подумайте о деталях столкновения, которые вам нужны, прежде чем выбрать.
 
-  If you want more information about this second parameter, you can have a look at this Wikipedia page, especially about AABB and OBB mode: [http://en.wikipedia.org/wiki/Bounding_volume](http://en.wikipedia.org/wiki/Bounding_volume)
+  Если вам нужна дополнительная информация об этом втором параметре, вы можете взглянуть на эту страницу Википедии, особенно о режиме AABB и OBB.: [http://en.wikipedia.org/wiki/Bounding_volume](http://en.wikipedia.org/wiki/Bounding_volume)
 
 * **Intersect point**
-  The other function you can use is “intersectsPoint()” with a specific point, like this:
+  Другая функция, которую вы можете использовать, это «intersectsPoint ()» с указанной точкой, например:
 
   ```javascript
   var pointToIntersect = new BABYLON.Vector3(10, -5, 0);
@@ -49,15 +48,15 @@ We are going to talk about the scene above. The first and second sphere (balloon
   }
   ```
 
-  We defined a precise point in our scene, and if our balloon intersects this point, wherever on the balloon, then the event is raised and we change the color of the balloon.
+  Мы определили точную точку в нашей сцене, и если наш воздушный шар пересекает эту точку, где бы на воздушном шаре ни находился, событие возникает, и мы меняем цвет воздушного шара..
 
-You can play with the code used in this tutorial... by visiting [**a demo at our playground**]( https://www.babylonjs-playground.com/?10).
+Вы можете играть с кодом, использованным в этом уроке... посетив [**a demo at our playground**]( https://www.babylonjs-playground.com/?10).
 
 ## Next step
 
-With those two functions, your scenes are becoming a lot more dynamic: you can define a specific reaction to object intersecting and colliding, and begin to introduce physics notions into your scene.
+С этими двумя функциями ваши сцены становятся намного более динамичными: вы можете определить конкретную реакцию на пересечение и столкновение объектов и начать вводить физические понятия в вашу сцену.
 
-In our next tutorial, you will discover how to [check collisions between your scene and the mouse](/babylon101/Picking_Collisions).
+В нашем следующем уроке вы узнаете, как [проверить столкновения между вашей сценой и мышью](/babylon101/Picking_Collisions).
 
 # Further Reading
 

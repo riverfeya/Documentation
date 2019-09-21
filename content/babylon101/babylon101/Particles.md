@@ -2,9 +2,9 @@
 ID_PAGE: 22121
 PG_TITLE: 14. Particles
 ---
-# Particles
+# Частицы
 
-This tutorial is going to talk about the particle system in BabylonJS. Particles are often small sprites used to simulate hard-to-reproduce phenomena like fire, smoke, water, or abstract visual effects like magic glitter and faery dust. This is done by emitting a cloud of very many particles from a region. From version 3.2 there are specific emitters to constrain this region in the shape of a box, sphere or cone. You can also write your own custom functions to control the cloud and region.
+Этот урок будет говорить о системе частиц в BabylonJS. Particles are often small sprites used to simulate hard-to-reproduce phenomena like fire, smoke, water, or abstract visual effects like magic glitter and faery dust. This is done by emitting a cloud of very many particles from a region. From version 3.2 there are specific emitters to constrain this region in the shape of a box, sphere or cone. You can also write your own custom functions to control the cloud and region.
 
 GPU particles are the latest addition to the particles family and can be used, with an appropriate browser, to boost performance.
 

@@ -5,44 +5,44 @@ PG_TITLE: 13. Raycasts
 
 # Raycasts 
 
-The rays are like sunrays.
-It's used to check collision or intersection in the scene between meshes and thin line.
+Лучи как солнечные лучи.
+Используется для проверки столкновения или пересечения в сцене между сетками и тонкой линией.
 
-In the previous tutorial, we used it to select meshes with the mouse (a ray goes from camera to mouse position in 3D),
-using the function scene.pick(scene.pointerX, scene.pointerY) : 
+В предыдущем уроке мы использовали его для выбора сетки мышью (луч проходит от камеры до положения мыши в 3D),
+используя функцию scene.pick(scene.pointerX, scene.pointerY) : 
 //doc.babylonjs.com/How_To/picking_collisions
 
-But here we will see that we can throw ray from any point and in any direction. 
-For example in a shooting game at 3rd person view : collisions between our bullets and obstacles.
+Но здесь мы увидим, что мы можем бросить луч из любой точки и в любом направлении. 
+Например, в стрелялке от третьего лица : столкновения между нашими пулями и препятствиями.
 
-**Documentation of classes :**
+**Документация классов :**
 
 //doc.babylonjs.com/classes/3.0/ray
-You have first to create a ray.
+Вы должны сначала создать луч.
 
 //doc.babylonjs.com/classes/3.0/scene
-The method scene.pickWithRay() throws a ray in your scene to pick a mesh.
+Метод scene.pickWithRay() бросает луч в вашу сцену, чтобы выбрать сетку.
 
 //doc.babylonjs.com/classes/3.0/pickinginfo
-And get the picking info.
+И получить информацию о попадании.
 
 ______
 
-## Detect the first mesh touched by the ray ##
+## Определить первый меш, которого коснулся луч ##
 
  https://www.babylonjs-playground.com/#KNE0O#84
 
 ![Raycast simple](/img/how_to/raycast01.jpg)
 
-In all our playgrounds, we will imagine that our character is the main box at the center.
-It will shoot laser beams continually forward and detect which enemy (other boxes) is hit.
-So with the mouse, you don't need to click but move to turn the box with this trigonometry function mousemovef (l34). 
-A ray requires when its created : an origin, a direction and a length. 
+Во всех наших playgrounds, мы представим, что наш персонаж - это главная бокс в центре.
+Он будет непрерывно стрелять лазерными лучами вперед и обнаруживать, в какого противника (другие боксы) попадет.
+Таким образом, с помощью мыши вам не нужно щелкать, а двигать, чтобы повернуть прямоугольник с этой функцией тригонометрии mousemovef (l34). 
+Луч требует, когда его создали : origin, direction и length. 
 
-First, we set *box.isPickable* to false to avoid the ray touching the box from the inside (l16).
-Because we set the starting point (origin) of the ray in the center of the box.
+Сначала мы устанавливаем *box.isPickable* в false чтобы луч не касался бокса изнутри (l16).
+Потому что мы устанавливаем отправную точку (origin) луча в центре бокса.
 
-The most important part is to get the good directional vector (l57) :
+Самая важная часть - получить хороший вектор направления. (l57) :
 		
 ```
 var forward = new BABYLON.Vector3(0,0,1);		
@@ -52,40 +52,40 @@ var direction = forward.subtract(origin);
 direction = BABYLON.Vector3.Normalize(direction);
 ```
 		
-We want the forward vector relative to the box space and orientation. 
-Then, to get the direction, we subtract it from the origin, the box position.
-The function vecToLocal is designed to transform a position from a mesh point of view by multiplicating a vector by the mesh matrix.
+Мы хотим вектор направленный вперед относительно пространства и ориентации бокса. 
+Затем, чтобы получить направление, мы вычитаем его из origin, the box position.
+Функция vecToLocal предназначена для преобразования позиции с точки зрения меша путем умножения вектора на матрицу меша.
 
-Then, we create the ray with all elements given and a length of 100 for example (l65) :
+затем, мы создаем луч со всеми данными элементами и length = 100 например (l65) :
 
 ```var ray = new BABYLON.Ray(origin, direction, length);```
 
-Finally, we get the hit point of the ray if it touches a mesh (l68) :
+Наконец, мы получаем точку попадания луча, если он касается сетки (l68) :
 
 ```var hit = scene.pickWithRay(ray);```
 
-And if a mesh is hit, we do what we want with the picking info like getting the mesh name, the position of the point etc...
-Here we change its size because it's funnier ! 
+И если ударить по мешу, мы делаем то, что хотим с информацией о выборе, например, получаем имя меша, положение точки etc...
+Здесь мы изменим его размер, потому что это смешнее ! 
 
 ---
 
-**You're not forced to set box.isPickable to false**, if you need later to check rays intersection on this box for example. 
-You can set the origin point of the vector in front of the box, the direction a little further and the length that you want (l55) :
+**Вы не обязаны устанавливать box.isPickable в false**, если вам нужно позже проверить пересечение лучей на этом боксе, например. 
+Вы можете установить origin point вектора перед боксом, направление немного дальше и длина, которую вы хотите (l55) :
 
  https://www.babylonjs-playground.com/#KNE0O#17
 
 
 -----
 
-## Predicate function ##
+## Предикат функии ##
 
-It is a filter to choose which meshes will be selectable :
+Это фильтр, чтобы выбрать, какие сетки будут выбираться :
 
  https://www.babylonjs-playground.com/#KNE0O#18
 
 ![Raycast predicate](/img/how_to/raycast02.jpg)
 
-I added a new function predicate (l54) :
+Я добавил новый function predicate (l54) :
 
   ```
   function predicate(mesh){
@@ -96,28 +96,26 @@ I added a new function predicate (l54) :
     }
 ```
 
-and in parameter here :
+и в параметре здесь :
 
 ```scene.pickWithRay(ray, predicate);```
 
-The isPickable false argument becomes irrelevant so we have to avoid box.
-We avoid also box2 for testing and allow the rest (box3 and box4 by default).
+Аргумент isPickable false становится неактуальным, поэтому мы должны избегать box. Мы также избегаем box2 для тестирования и позволяем остальным (box3 и box4 by default).
 
-And the result is, only box3, the second blue one behind, and box4 will grow.
-So it works fine like if box2 was transparent for the ray !  
+И результат, только box3, второй синий позади, и box4 будет расти. Так что работает нормально, как будто box2 был прозрачным для луча!
 
 ---
 
-There is one other optional argument to the method pickWithRay.
-It's the boolean **fastCheck** (false by default).
-True will return the first mesh that intersects with the ray (in the order of the meshes array), and not the closest mesh to the ray's starting point.
+Есть еще один необязательный аргумент метода pickWithRay.
+Это логическое **fastCheck** (false по умолчанию).
+True вернет первый меш, который пересекается с лучом (в порядке массива мешей), а не ближайший меш к начальной точке луча.
 
 
 -----
 
 ## Triangle predicate ## 
 
-Starting with Babylon.js v4.0 you can define a custom predicate to filter the triangles selected to be tested against the incoming ray. The predicate will be called with the 3 vertices of each face and the upcoming ray:
+Наичная с Babylon.js v4.0 вы можете определить собственный predicate для фильтра выбранных треугольников для проверки на входящий луч. Predicate будет вызван с 3 вершинами каждого лица и предстоящего луча:
 
 ```
 scene.pick(scene.pointerX, scene.pointerY, null, false, null, (p0, p1, p2, ray) => {
@@ -128,33 +126,33 @@ scene.pick(scene.pointerX, scene.pointerY, null, false, null, (p0, p1, p2, ray) 
   });
 ```
 
-In this example we are filtering out all the triangles that are not facing towards the camera.
+В этом примере мы отфильтровываем все треугольники, которые не обращены к камере..
 
-Live example: https://www.babylonjs-playground.com/#EES9W5
+Живой пример: https://www.babylonjs-playground.com/#EES9W5
 
 -----
 
-## Multi pick ## 
+## Множественный pick ## 
 
-We can use *scene.multiPickWithRay* if we don't want that the ray stops at the first obstacle : 
+МЫ можем использовать *scene.multiPickWithRay* если мы не хотим, чтобы луч останавливался у первого препятствия : 
 
  https://www.babylonjs-playground.com/#KNE0O#19
 
 ![Raycast multipick](/img/how_to/raycast02.jpg)
 
-The picking result will be an array (l68).
-So we do a loop to change all meshes hit and you can see that the two blue boxes size change. 
-It's like a strong bullet ! 
+Результатом пиккинга будет массив (l68).
+Таким образом, мы делаем цикл, чтобы изменить все меши который попали под луч и вы можете видеть, что размер двух синих боксов меняется. 
+Это как сильная пуля ! 
 
 ---
 
-An other method is to use directly the **Ray class**.
+Другой метод заключается в непосредственном использовании **Ray class**.
 
-To change the ray to a local space :
+Чтобы изменить луч в локальное пространство :
 
 ```Ray.Transform(ray, matrix) → Ray```
 
-Checking intersection :
+Проверка пересечения :
 
 ```Ray.intersectsMesh(mesh, fastCheck) → PickingInfo```
 
@@ -162,22 +160,22 @@ Checking intersection :
 
 ## Debugging 
 
-It could be tough to understand where a ray starts and is its direction. To help you debug you can then use the RayHelper.
+Может быть трудно понять, где начинается луч и каково его направление. Чтобы помочь вам отладить, вы можете использовать RayHelper.
 
-You can either use a static function to create and show one:
+Вы можете использовать статическую функцию, чтобы создать и показать один:
 
 ```
 BABYLON.RayHelper.CreateAndShow(ray, scene, new BABYLON.Color3(1, 1, 0.1));
 ```
 
-or you can use a more detailled version:
+или вы можете использовать более подробную версию:
 
 ```
 var rayHelper = new BABYLON.RayHelper(ray);
 rayHelper.show(scene);
 ```
 
-The helper can also be attached to a mesh to track its direction:
+Помощник также может быть прикреплен к сетке, чтобы отслеживать его направление.:
 
 ```
 var localMeshDirection = new BABYLON.Vector3(0, 0, -1);
@@ -190,7 +188,7 @@ rayHelper.attachToMesh(box, localMeshDirection, localMeshOrigin, length);
 
 ## Next step
 
-Often it is sufficient to have some 2D shapes in you scene and [**sprites**](/babylon101/Sprites) are next.
+Часто бывает достаточно иметь 2D-фигуры в вашей сцене и [**sprites**](/babylon101/Sprites) are next.
 
 
 # Further Reading

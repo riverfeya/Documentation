@@ -3,35 +3,34 @@ ID_PAGE: 22051
 PG_TITLE: 05. Materials
 ---
 
-# Materials
-Materials allow you to cover your meshes in color and texture and they need light to be seen. One material can be used to cover as many meshes as you wish.
+# материалы
+Материалы позволяют вам покрывать ваши сетки цветом и текстурой, и им нужен свет, чтобы их можно было увидеть. Один материал может быть использован для покрытия любого количества мешей.
 
 
-## Reactions to light
-Whether the material is a color or a texture there are different ways it can react to light.
+## Реакция на свет
+Является ли материал цветом или текстурой, есть разные способы реагирования на свет.
 
-1. Diffuse - the basic color or texture of the material as viewed under a light;
-2. Specular - the highlight given to the material by a light;
-3. Emissive - the color or texture of the material as if self lit;
-4. Ambient - the color or texture of the material lit by the environmental background lighting.
+1. Diffuse - основной цвет или текстуру материала при свете;
+2. Specular - основной блик, данный материалу светом;
+3. Emissive - цвет или фактура материала как бы самосветящиеся;
+4. Ambient - цвет или фактуру материала, освещаемого фоновым освещением окружающей среды.
 
-Diffuse and Specular material require a [light source](/features/Lights) to be created.  
-Ambient color requires the ambient color of the scene to be set, giving the environmental background lighting.
+Diffuse и Specular требуют [light source](/features/Lights) для создания.  
+Ambient color требует установленного в сцене ambient color, дающего фоновое освещение окружающей среды.
 ```javascript
 scene.ambientColor = new BABYLON.Color3(1, 1, 1);
 ```
 
-5. Transparency - the level that you can see through the material can be set and for images with transparent sections it can be used so that appropriate parts of the material are invisible. This requires an _alpha_ property to be set.
+5. Transparency - уровень, который вы можете видеть сквозь материал, можно установить, а для изображений с прозрачными сечениями его можно использовать так, чтобы соответствующие части материала были невидимы. Для этого необходимо установить свойство _alpha_.
 
 
 ## Color
-Create a material using
+Создать материал, используя
 
 ```javascript
 var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
 ```
-Set the material color using one, some or all of _diffuseColor_, _specularColor_, _emissiveColor_ and _ambientColor_. Remember that _ambientColor_ 
-will only apply if the scene ambient color has been set.
+Установите цвет материала, используя один, несколько или все из _diffuseColor_, _specularColor_, _emissiveColor_ и _ambientColor_. Помните, что _ambientColor_ будет применяться только в том случае, если был установлен цвет окружающей сцены.
 
 ```javascript
 var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
@@ -44,7 +43,7 @@ myMaterial.ambientColor = new BABYLON.Color3(0.23, 0.98, 0.53);
 mesh.material = myMaterial;
 ```
 ### Diffuse Color Example
-To give an idea on how the material diffuse color reacts to the diffuse light color the following playground example shows how different color materials react to white, red, green and blue diffuse spot lights.
+Чтобы дать представление о том, как рассеивающий цвет материала реагирует на рассеянный свет, в следующем примере игровой площадки показано, как разные цветовые материалы реагируют на рассеянное освещение белого, красного, зеленого и синего цвета.
 
 * [Playground Example - Material Color Reaction to Light Color _direct click or edit to view_](http://www.babylonjs-playground.com/#20OAV9#325)  
 
@@ -55,7 +54,7 @@ This reaction of
 | Yellow Material |  Purple Material |
 | Cyan Material | White Material |
 
-to white, red, green and blue diffuse spot lights can also be seen in the following image.
+на белом, красном, зеленом и синем рассеянных точечных источниках света также можно увидеть на следующем изображении.
 
 ![ Spot Light](/img/how_to/Materials/spots1.png)
 
@@ -82,7 +81,7 @@ Create a material using
 ```javascript
 var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
 ```
-Set the material texture using one, some or all of _diffuseTexture_, _specularTexture_, _emissiveTexture_ and _ambientTexture_. 
+Установите текстуру материала, используя один, некоторые или все _diffuseTexture_, _specularTexture_, _emissiveTexture_ and _ambientTexture_. 
 Notice that _ambientTexture_ is applied without the scene ambient color having been set.
 
 ```javascript
@@ -139,7 +138,7 @@ When _backFaceCulling_ is false the back faces are not removed during rendering 
 * [Playground Example Back Face Culling True](http://www.babylonjs-playground.com/#YDO1F#20)
 
 ## WireFrame
-You can see a mesh in wireframe mode by using:
+Вы можете увидеть сетку в режиме каркаса, используя:
 ```javascript
 materialSphere1.wireframe = true;
  ```

@@ -3,19 +3,19 @@ ID_PAGE: 22011
 PG_TITLE: 02. Set Shapes
 ---
 
-# Set Shapes 101
+# Набор фигур 101
 
-These are shapes that usually already have names in everyday use. They are a box (or cuboid), a sphere, a cylinder, a cone, regular polygons, a plane and a specialist horizontal plane called the ground. Slightly less well known but also included in set shapes are a torus, a torus knot and the polyhedra. You will have to wait for the next section to learn how to create shapes that have no everyday names but are formed through data sets and parameters. These are termed _parametric shapes_.
+Это формы, которые обычно уже имеют имена в повседневном использовании. Это бокс (или кубоид), сфера, цилиндр, конус, правильные многоугольники, плоскость и специальная горизонтальная плоскость, называемой землей. Чуть менее известны, но также включены в набор форм тор, тороидальный узел и многогранник. Вам нужно будет дождаться следующего раздела, чтобы узнать, как создавать фигуры, которые не имеют обычных имен, но формируются с помощью наборов данных и параметров. Это называется _parametric shapes_.
 
-In the 101 course you will only meet a limited number of set shapes, starting on this page with boxes, spheres, planes and ground. Also you will just use the _MeshBuilder_ method of shape creation rather than the older legacy _Mesh_ method. How to create all the set shapes using either method and the advantages and disadvantages of both can be found by doing [Further Reading](#further_reading).
+В курсе 101 вы встретите только ограниченное количество заданных форм, начиная с этой страницы с boxes, spheres, planes и ground. Также вы просто будете использовать метод _MeshBuilder_ метод создания формы, а не прежний устаревший метод _Mesh_. Как создать все заданные фигуры, используя любой метод, и преимущества и недостатки обоих можно найти, выполнив [Further Reading](#further_reading).
 
-## MeshBuilder Method
+## метод MeshBuilder
 
-The general form to create a set shape is:
+Общая подход для создания набора форм:
 
 var _shape_ = BABYLON.MeshBuilder.Create<i>Shape</i>(name, options, scene);
 
-The options parameter allows you to do such things as set the size of the shape and set whether you can update it or not. Specific examples below.
+Параметр options позволяет вам делать такие вещи, как установить размер фигуры и указать, можете ли вы обновить его или нет. Конкретные примеры ниже.
 
 ### Box
 
@@ -27,13 +27,13 @@ var myBox = BABYLON.MeshBuilder.CreateBox("myBox", {height: 5, width: 2, depth: 
 
 option|value|default value
 --------|-----|------------
-size|_(number)_ size of each box side|1
-height|_(number)_ height size, overwrites _size_ property|size
-width|_(number)_ width size, overwrites _size_ property|size
-depth|_(number)_ depth size,  overwrites _size_ property|size
-faceColors|_(Color4[])_ array of 6 _Color4_, one per box face|Color4(1, 1, 1, 1) for each side
-faceUV|_(Vector4[])_ array of 6 _Vector4_, one per box face| UVs(0, 0, 1, 1) for each side
-updatable|_(boolean)_ true if the mesh is updatable|false
+size|_(number)_ размер каждой стороны бох|1
+height|_(number)_ размер по высоте, перезаписывает свойство _size_ |size
+width|_(number)_ размер ширины, перезаписывает свойство _size_|size
+depth|_(number)_ размер глубины,  перезаписывает свойство _size_|size
+faceColors|_(Color4[])_ массив 6 _Color4_, по одному на каждую грань бокса|Color4(1, 1, 1, 1) для каждой стороны
+faceUV|_(Vector4[])_ array of 6 _Vector4_, one per box face| UVs(0, 0, 1, 1) для каждой стороны
+updatable|_(boolean)_ true если меш updatable|false
 sideOrientation|_(number)_ side orientation|DEFAULTSIDE
 
 * [Playground Example of a Cuboid](https://www.babylonjs-playground.com/#3QW4J1#1)
@@ -48,14 +48,14 @@ var mySphere = BABYLON.MeshBuilder.CreateSphere("mySphere", {diameter: 2, diamet
 
 option|value|default value
 --------|-----|-------------
-segments|_(number)_ number of horizontal segments|32
-diameter|_(number)_ diameter of the sphere|1
-diameterX|_(number)_ diameter on X axis, overwrites _diameter_ property|diameter
-diameterY|_(number)_ diameter on Y axis, overwrites _diameter_ property|diameter
-diameterZ|_(number)_ diameter on Z axis, overwrites _diameter_ property|diameter
-arc|_(number)_ ratio of the circumference (latitude) between 0 and 1|1
-slice|_(number)_ ratio of the height (longitude) between 0 and 1|1
-updatable|_(boolean)_ true if the mesh is updatable|false
+segments|_(number)_ количество горизонтальных сегментов|32
+diameter|_(number)_ диаметр сферы|1
+diameterX|_(number)_ диаметр по оси X , перезаписывает свойство _diameter_ |diameter
+diameterY|_(number)_ диаметр по оси Y , перезаписывает свойство _diameter_ |diameter
+diameterZ|_(number)_ диаметр по оси Z , перезаписывает свойство _diameter_ |diameter
+arc|_(number)_ отношение окружности (latitude) между 0 и 1|1
+slice|_(number)_ ratio of the height (longitude) между 0 и 1|1
+updatable|_(boolean)_ истина, если сетка обновляемая|false
 sideOrientation|_(number)_ side orientation|DEFAULTSIDE
 
 * [Playground Example of an Ellipsoid](https://www.babylonjs-playground.com/#K6M44R)
@@ -73,7 +73,7 @@ option|value|default value
 size|_(number)_ side size of the plane|1
 width|_(number)_ size of the width|size
 height|_(number)_ size of the height|size
-updatable|_(boolean)_ true if the mesh is updatable|false
+updatable|_(boolean)_ истина, если сетка обновляемая|false
 sideOrientation|_(number)_ side orientation|DEFAULTSIDE
 frontUVs|_(Vector4[])_  array of Vector4, **ONLY WHEN sideOrientation:BABYLON.Mesh.DOUBLESIDE set** | Vector4(0,0, 1,1) 
 backUVs|_(Vector4[])_  array of Vector4, **ONLY WHEN sideOrientation:BABYLON.Mesh.DOUBLESIDE set** | Vector4(0,0, 1,1) 
@@ -87,7 +87,7 @@ _sourcePlane_ is a unique option for a plane mesh and provides a method to orien
 var sourcePlane = new BABYLON.Plane(0, -1, 1, 0);
 sourcePlane.normalize();
 ```
-This creates a mathematical plane which is used as the orientation source. The fourth parameter is a distance moved in the direction of the orientation vector. At this stage leave as 0. 
+Это создает математическую плоскость, которая используется в качестве источника ориентации. Четвертый параметр - это расстояние, перемещаемое в направлении вектора ориентации. На этом этапе оставьте как 0. 
 
 * [Playground Example with Source Plane](https://www.babylonjs-playground.com/#LXZPJK#2)
 
@@ -105,55 +105,55 @@ option|value|default value
 --------|-----|-------------
 width|_(number)_ size of the width|1
 height|_(number)_ size of the height|1
-updatable|_(boolean)_ true if the mesh is updatable|false
+updatable|_(boolean)_ истина, если сетка обновляемая|false
 subdivisions|_(number)_ number of square subdivisions|1
 
 * [Playground Example of Ground](https://www.babylonjs-playground.com/#MJ6YSM)
 
-A variation on _CreateGround_ is [_CreateGroundFromHeightMap_](/babylon101/Height_map) which lets you form undulating ground rather than a flat plane.
+Вариант _CreateGround_ это [_CreateGroundFromHeightMap_](/babylon101/Height_map) что позволяет вам формировать волнистую почву, а не плоский план.
 
 ## Face Colors or UV
 
-This is only available on a limited number of meshes that have distinct faces such as a box but not a sphere. This allows you to give each face for those meshes an individual color or image. [Find out about Face Colors and UV](/How_To/CreateBox_Per_Face_Textures_And_Colors).
+Это доступно только для ограниченного числа мешей, которые имеют различные грани, такие как прямоугольник, но не сфера. Это позволяет придать каждой грани этих мешей индивидуальный цвет или изображение. [Find out about Face Colors and UV](/How_To/CreateBox_Per_Face_Textures_And_Colors).
 
 ## Updatable
 
-Where a mesh has the updatable parameter set to true it means that it is possible to alter the data associated with each vertex of the mesh and so alter the shape of the mesh. For more information see [How to Update Vertices](/How_To/Updating_Vertices.html)
+Если меш имеет параметр updatable установленный в true это означает, что можно изменить данные, связанные с каждой вершиной сетки, и тем самым изменить форму сетки. Подробнее смотри [How to Update Vertices](/How_To/Updating_Vertices.html)
 
 
 ## Side Orientation
   
-The side orientation option is used to change how each side of a mesh is viewed.  
+Опция side orientation используется для изменения способа просмотра каждой стороны меша.  
 
-There are four possible values for this option :  
+Есть четыре возможных значения для этой опции :  
 
   * BABYLON.Mesh.FRONTSIDE,
   * BABYLON.Mesh.BACKSIDE,
   * BABYLON.Mesh.DOUBLESIDE,
-  * BABYLON.Mesh.DEFAULT which is the default value and equals FRONTSIDE currently.
+  * BABYLON.Mesh.DEFAULT который является значением по умолчанию и равен FRONTSIDE currently.
 
-In the following examples you can compare between DEFAULT and DOUBLESIDE by moving your screen pointer left and right to rotate the planes.
+В следующих примерах вы можете сравнить DEFAULT и DOUBLESIDE перемещая указатель на экране влево и вправо, чтобы вращать плоскости.
 * [Playground Example of a DEFAULT Plane](https://www.babylonjs-playground.com/#LXZPJK)
 * [Playground Example of a DOUBLESIDE Plane](https://www.babylonjs-playground.com/#LXZPJK#1)
 
 
-## Front and Back UV
+## Front и Back UV
 
-When a mesh has a sideOrientation option present and it is set to DOUBLESIDE then it is possible for the front and back to display different images. For more information see [How To Display Front and Back Images](LINK)
+Когда сетка имеет опцию sideOrientation настоящее и установлено DOUBLESIDE тогда на передней и задней панели могут отображаться разные изображения. Подробнее смотри [How To Display Front and Back Images](LINK)
 
 ## Coming Soon 
 
-When you create a mesh it is always centered at the origin and in line with the axes. You will want to give it a different position and rotation. If you can't wait then skip the next step and go to [How to Change Position and Rotation](/babylon101/Position)
+Когда вы создаете сетку, она всегда центрируется в начале координат и по осям. Вы хотите, чтобы дать ему другое положение и вращение. Если вы не можете ждать, пропустите следующий шаг и перейдите к [Как изменить положение и вращение](/babylon101/Position)
 
-# Next Step 
+# Следующий шаг 
 
-Now that you have some of the set shapes under your belt its time to find out about [Shapes Less Set in Their Ways](/babylon101/Parametric_Shapes)
+Теперь, когда у вас есть несколько фигур на поясе, пришло время узнать о [Shapes Less Set in Their Ways](/babylon101/Parametric_Shapes)
 
 # Further Reading
 
 ## Basic - L1
-[How to Create Set Shapes with MeshBuilder](/How_To/Set_Shapes)  
-[How to Create Set Shapes Legacy Method](/How_To/Legacy_Set)  
-[Advantages and Disadvantages](/features/Shapes#ways-of-creating-a-predefined-mesh)
+[Как создать формы из набора форм с помошью MeshBuilder](/How_To/Set_Shapes)  
+[как создавать формы устаревшим методом](/How_To/Legacy_Set)  
+[Преимущества и недостатки](/features/Shapes#ways-of-creating-a-predefined-mesh)
 
 

@@ -1,162 +1,159 @@
 ---
 ID_PAGE: 22071
-PG_TITLE: 06. Lights
+PG_TITLE: 06. ИС
 ---
 
-# Lights
-Lights are used, as you would expect, to affect how meshes are seen, in terms of both illumination and colour.
-All meshes allow light to pass through them unless shadow generation is activated. The default number of lights allowed is
-four but this can be increased.
+# ИС
+Как и следовало ожидать, источники света влияют на то, как видны меши, как с точки зрения освещения, так и цвета.
+Все меши позволяют свету проходить через них, если не активирована генерация тени. Допустимое количество источников света по умолчанию - четыре, но его можно увеличить.
 
 ![Elements](https://doc.babylonjs.com/img/testlight.jpg)
 
-_A pretty sphere with multiple lights_
+_Красивая сфера с несколькими огнями_
 
 
-## Types of Lights
-There are four types of lights that can be used with a range of lighting properties.
+## ТИпы источников света (ИС)
+Есть четыре типа ИС которые могут быть использованы с рядом световых свойств.
 
-### The Point Light
-A point light is a light defined by an unique point in world space. The light is emitted in every direction from this point. A good example of a point light is a standard light bulb.
+### Точечный источник
+Точечный свет - это свет, определяемый уникальной точкой в ​​мировом пространстве. С этой точки свет излучается во всех направлениях. Хорошим примером точечного светильника является стандартная лампочка.
 
 ```javascript
 var light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(1, 10, 1), scene);
 ```
 
-### The Directional Light
-A directional light is defined by a direction (what a surprise!). The light is emitted from everywhere in the specified direction, and has an infinite range.
-An example of a directional light is when a distance planet is lit by the apparently parallel lines of light from its sun. Light in a downward direction will light
-the top of an object.
+### Направленный свет
+Directional light определяется направлением. Свет излучается отовсюду в указанном направлении и имеет бесконечный диапазон.
+Пример направленного света - это когда планета на расстоянии освещается, по-видимому, параллельными линиями света от солнца. Свет  направленный вниз осветит верхнюю часть объекта.
 
 ```javascript
 var light = new BABYLON.DirectionalLight("DirectionalLight", new BABYLON.Vector3(0, -1, 0), scene);
 ```
 
-### The Spot Light
-A spot light is defined by a position, a direction, an angle, and an exponent. These values define a cone of light starting from the position, emitting toward the direction.
+### Спотовый источник света
+Spot light определяется положением, направлением, углом и показателем степени (exponent). Эти значения определяют конус света, исходящий из положения, излучающего в направлении.
 
-The angle, in radians, defines the size (field of illumination) of the spotlight's conical beam , and the exponent defines the speed of the decay of the light with distance (reach).
+Угол в радианах определяет размер (поле освещения) конического луча прожектора, а показатель степени определяет скорость затухания света с расстоянием (досягаемостью).
 
-_A simple use of a spot light_
+_Простое использование прожектора_
 
 ```javascript
 var light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(0, 30, -10), new BABYLON.Vector3(0, -1, 0), Math.PI / 3, 2, scene);
 ```
 
-### The Hemispheric Light
-A hemispheric light is an easy way to simulate an ambient environment light. A hemispheric light is defined by a direction, usually 'up' towards the sky. However it is by setting the color properties
-that the full effect is achieved.
+### Полусферический источник света
+Hemispheric light это простой способ имитировать окружающий свет. Полусферический свет определяется направлением, обычно «вверх» к небу. Однако именно путем настройки свойств источника света достигается полный эффект.
 
 ```javascript
 var light = new BABYLON.HemisphericLight("HemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 ```
 
 ## Color Properties
-There are three properties of lights that affect color. Two of these _diffuse_ and _specular_ apply to all four types of light, the third, _groundColor_, only applies to an Hemispheric Light.
+Есть три свойства ИС которые влияют на свет. Два из них _diffuse_ и _specular_ применимо ко всем четырем типам света, третий, _groundColor_, относится только к Hemispheric Light.
 
-1. Diffuse gives the basic color to an object;
-2. Specular produces a highlight color on an object.
+1. Diffuse придает базовый цвет объекта;
+2. Specular цвет блика.
 
-In these playgrounds see how the specular color (green) is combined with the diffuse color (red) to produce a yellow highlight.
+В этом playgrounds видно как зеленый specular color (green) сочетаясь с диффузным красным (red) производит желтый блик.
 
-* [Playground example of a point light](http://www.babylonjs-playground.com/#20OAV9)
+* [Playground пример точечного ИС](http://www.babylonjs-playground.com/#20OAV9)
 
-* [Playground example of a directional light](http://www.babylonjs-playground.com/#20OAV9#1)
+* [Playground пример направленного (directional) ИС](http://www.babylonjs-playground.com/#20OAV9#1)
 
-* [Playground example of a spot light](http://www.babylonjs-playground.com/#20OAV9#3)
+* [Playground пример Прожекторного ИС](http://www.babylonjs-playground.com/#20OAV9#3)
 
-* [Playground example of a hemispheric light](http://www.babylonjs-playground.com/#20OAV9#5)
+* [Playground пример купольного (hemispheric) ИС](http://www.babylonjs-playground.com/#20OAV9#5)
 
-For a hemispheric light the _groundColor_ is the light in the opposite direction to the one specified during creation.
-You can think of the _diffuse_ and _specular_ light as coming from the centre of the object in the given direction and the _groundColor_ light in the opposite direction.
+Для полусферического света _groundColor_ свет в направлении, противоположном указанному при создании.
+Его можно представлять как _diffuse_ и _specular_ light как исходящий из центра объекта в заданном направлении и света _groundColor_ в противоположном направлении.
 
-* [Playground example of a hemispheric light on two spheres](http://www.babylonjs-playground.com/#20OAV9#6)
+* [Playground пример hemispheric ИС на двух сферах](http://www.babylonjs-playground.com/#20OAV9#6)
 
-White hemispheric light with a black groundColor is a useful lighting method.
+Белый полусферический свет с черным groundColor - полезный метод освещения.
 
-### Intersecting Lights Colors
-* [Playground example of intersecting spot lights](http://www.babylonjs-playground.com/#20OAV9#9)
+### Intersecting ИС Colors
+* [Playground пример пересечения spot ИС](http://www.babylonjs-playground.com/#20OAV9#9)
 
 ## Limitations
-Babylon.js allows you to create and register as many lights as you choose, but know that a single StandardMaterial can only handle a defined number simultaneous lights (by default this value is equal to 4 which means the first four enabled lights of the scene's lights list).
-You can change this number with this code:
+Babylon.js позволяет создавать и регистрировать столько ИС сколько вы хотите, но знайте, что один StandardMaterial может обрабатывать только определенное количество одновременно ИС (по умолчанию это значение равно 4 что означает первые четыре включенных ИС из списка ИС сцены).
+Вы можете изменить это количество с помощью этого кода:
 
 ```javascript
 var material = new BABYLON.StandardMaterial("mat", scene);
 material.maxSimultaneousLights = 6;
 ```
-But beware! Because with more dynamic lights, Babylon.js will generate bigger shaders which may not be compatible with low end devices like mobiles or small tablets. In this case, babylon.js will try to recompile shaders with less lights.
+Но будьте осторожны! Поскольку с более динамичной ИС, Babylon.js будет генерировать большие шейдеры, которые могут быть несовместимы с низкоуровневыми устройствами, такими как мобильные телефоны или небольшие планшеты. В этом случае babylon.js попытается перекомпилировать шейдеры с меньшим количеством ИС.
 
-* [Playground example of 6 interacting point lights](https://www.babylonjs-playground.com/#IRVAX#0)
+* [Playground пример с шестью взаимодействующих точечных ИС](https://www.babylonjs-playground.com/#IRVAX#0)
 
-## On, Off or Dimmer
-Every light can be switched off using
+## On, Off или Dimmer
+Каждый ИС может быть выключен с помощью
 ```javascript
 light.setEnabled(false);
 ```
-and switched on with
+и включен с
 ```javascript
 light.setEnabled(true);
 ```
 
-Want to dim or brighten the light? Then set the _intensity_ property (default values is 1)
+Хотите затемнить или сделать ярче свет? установите свойство _intensity_ (значения по умолчанию 1)
 ```javascript
 light0.intensity = 0.5;
 light1.intensity = 2.4;
 ```
 
-For point and spot lights you can set how far the light reaches using the _range_ property
+Для точечного и прожекторного ИС вы можете установить, как далеко свет достигает, используя свойство _range_ 
 ```javascript
 light.range = 100;
 ```
 
-## Choosing Meshes to Light
-when a light is created all current meshes will be lit by it. There are two ways to exclude some meshes from being lit.
-A mesh can be added to the _excludedMeshes_ array or add the ones not to be excluded to the _includedOnlyMeshes_ array. The number of meshes to be excluded can be one factor in deciding which method to use. In the following example two meshes are to be excluded from _light0_ and twenty three from _light1_. Commenting out lines 26 and 27 in turn will show the individual effect.
+## Выбор мешей для освещения
+при создании ИС все текущие меши будут освещены им. Есть два способа исключить освещение некоторых мешей.
+Меш может быть добавлен ​​к массиву _excludedMeshes_ или добавить те, которые не должны быть исключены в массив _includedOnlyMeshes_ .Количество мешей, которые нужно исключить, может быть одним из факторов при выборе метода для использования. В следующем примере два меша должны быть исключены из _light0_ и twenty three из _light1_. Комментирование строк 26 и 27 в свою очередь покажет индивидуальный эффект.
 
-* [Playground Example Excluding Lights](http://www.babylonjs-playground.com/#20OAV9#8)
+* [Playground пример Excluding ИС](http://www.babylonjs-playground.com/#20OAV9#8)
 
 ## Lighting Normals
-How lights react to a mesh depend on values set for each mesh vertex termed _normals_, shown in the picture below as arrows giving the direction of the lighting normals. The picture shows two planes and two lights. One light is a spot light, the other is a point light. The front face of each plane is the one you see when the _normals_ are pointing towards you, the back face the opposite side.
+Как ИС реагировать на сетку в зависимости от значений, установленных для каждой вершины сетки _normals_, показано на рисунке ниже стрелками, указывающими направление нормалей освещения. На рисунке показаны две плоскости и два ИС. One light is a spot light, the other is a point light. Лицевой стороной каждой плоскости является та, которую вы видите, когда _normals_ указывают на вас, задняя сторона противоположная сторона.
 
 ![Elements](https://doc.babylonjs.com/img/how_to/Mesh/normals6.jpg)
 
-_A blue back-faced plane and a blue front-faced plane, with a spot light and point light_
+_Синяя задняя плоскость и синяя передняя плоскость с точечным и спотовым освещением_
 
-As you can see, the lights only affect the front face and not the back face.
+As you can see, the ИС only affect the front face and not the back face.
 
 ## Lightmaps
-Complex lighting can be computationally expensive to compute at runtime. To save on computation, lightmaps may be used to store calculated lighting in a texture which will be applied to a given mesh.
+Сложное освещение может быть вычислительно дорогим для вычисления во время выполнения. Чтобы сэкономить на вычислениях, карты освещения могут использоваться для хранения вычисленного освещения в текстуре, которая будет применена к данной сетке..
 ```javascript
 var lightmap = new BABYLON.Texture("lightmap.png", scene);
 var material = new BABYLON.StandardMaterial("material", scene);
 material.lightmapTexture = lightmap;
 ```
-Note: To use the texture as a shadowmap instead of lightmap, set the material.useLightmapAsShadowmap field to true.
+Note: Чтобы использовать текстуру в качестве карты теней вместо карты освещения, установите поле material.useLightmapAsShadowmap в true.
 
-The way that the scene lights are blended with the lightmap is based on the lightmapMode of the lights in the scene.
+Способ смешивания ИС сцены с картой освещения основан на режиме освещения карты ИС в сцене.
 
 ```javascript
 light.lightmapMode = BABYLON.Light.LIGHTMAP_DEFAULT;
 ```
-This will cause lightmap texture to be blended after the lighting from this light is applied.
+Это приведет к смешиванию текстуры карты освещения после применения освещения от этого источника света..
 
 ```javascript
 light.lightmapMode = BABYLON.Light.LIGHTMAP_SPECULAR;
 ```
-This is the same as LIGHTMAP_DEFAULT except only the specular lighting and shadows from the light will be applied.
+Это так же, как LIGHTMAP_DEFAULT кроме только specular lighting и shadows от света будет применяться.
 
 ```javascript
 light.lightmapMode = BABYLON.Light.LIGHTMAP_SHADOWSONLY;
 ```
-This is the same as LIGHTMAP_DEFAULT except only the shadows cast from this light will be applied.
+Это так же, как LIGHTMAP_DEFAULT кроме только shadows cast из этого light будет применяться.
 
 * [Playground Example](https://www.babylonjs-playground.com/#ULACCM#2)
 
 ## Projection Texture
-In some cases it would be nice to define the diffuse color of the light (Diffuse gives the basic color to an object) from a texture instead of a constant color. Imagine that you are trying to simulate the light effects inside of a cathedral. The light going through the stained glasses will be projected on the ground. This is also true for the light coming from a projector or the light effects you can see in a disco.
+В некоторых случаях было бы неплохо определить диффузный цвет света из текстуры вместо постоянного цвета. Представьте, что вы пытаетесь смоделировать световые эффекты внутри собора. Свет, проходящий через витражи, будет проецироваться на землю. Это также относится к свету, исходящему от проектора, или световым эффектам, которые можно увидеть на дискотеке..
 
-In order to support this feature, you can rely on the `projectionTexture` property of the lights. This is only supported by the **SpotLight** so far.
+Для поддержки этой функции вы можете положиться на свойство `projectionTexture` ИС. Это поддерживается только **SpotLight** so far.
 
 ```javascript
 var spotLight = new BABYLON.SpotLight("spot02", new BABYLON.Vector3(30, 40, 30),
@@ -166,19 +163,19 @@ spotLight.projectionTexture = new BABYLON.Texture("textures/stainedGlass.png", s
 
 * [Playground Example](https://www.babylonjs-playground.com/#CQNGRK)
 
-In order to control the projection orientation and range, you can also rely on the following properties:
+Для управления ориентацией проекции и диапазоном вы также можете положиться на следующие свойства:
 
-* ```projectionTextureLightNear``` : near range of the texture projection. If a plane is before the range in light space, there is no texture projection.
-* ```projectionTextureLightFar``` : far range of the texture projection. If a plane is before the range in light space, there is no texture projection.
-* ```projectionTextureUpDirection``` : helps defining the light space which is oriented towards the light direction and aligned with the up direction.
+* ```projectionTextureLightNear``` : near диапазон текстурной проекции. Если плоскость находится перед диапазоном в светлом пространстве, текстурная проекция отсутствует.
+* ```projectionTextureLightFar``` : far диапазон текстурной проекции. Если плоскость находится перед диапазоном в светлом пространстве, текстурная проекция отсутствует.
+* ```projectionTextureUpDirection``` : помогает определить световое пространство, которое ориентировано в направлении света и выровнено с направлением вверх.
 
-The projected information is multiplied against the normal light values to better fit in the Babylon JS lighting. It also only impact the diffuse value. So it might be necessary to change the specular color of the light to better fit with the scene.
+Проецируемая информация умножается на нормальные значения освещенности, чтобы лучше соответствовать Babylon JS lighting. Это также влияет только на диффузное значение. Поэтому может потребоваться изменить зеркальный цвет света, чтобы он лучше подходил к сцене.
 
 ## Next step
-With the use of these powerful lights, your scene is likely really starting to 'shine'. And don't forget that you can animate light positions, directions, colors, and therefore create wonderful 'light shows'. We'll talk about that soon, or have fun discovering how to do it on your own. Maybe you could do light property settings inside the scene's render loop function. Its fun and beautiful!
+С использованием этих мощных ИС, ваша сцена, вероятно, действительно начинает 'shine'. И не забывайте, что вы можете анимировать световые позиции, направления, цвета и, следовательно, создавать прекрасные «световые шоу». Мы скоро поговорим об этом, или весело проведем время, узнавая, как это сделать самостоятельно. Может быть, вы могли бы сделать настройки свойств света внутри функции цикла рендеринга сцены. Это весело и красиво!
 
 Guess what! The next tutorial... is about animation! [Click this and let's go!](/babylon101/Animations)
 
 # Further Reading
 
-[Lights Overview](/features/Lights)
+[ИС Overview](/features/ИС)

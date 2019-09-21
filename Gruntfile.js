@@ -1,9 +1,9 @@
 module.exports = function(grunt) {
 
-    // show elapsed time at the end
+    // показать прошедшее время в конце
     require('time-grunt')(grunt);
 
-    // load all grunt tasks
+    // загрузить все задачи
     require('load-grunt-tasks')(grunt);
     var serveStatic = require('serve-static');
 
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
                         // not found? do the html magic!
                         middlewares.push(function(req, res, next) {
                             for (var file, i = 0; i < options.base.length; i++) {
-                                file = options.base/* './public/html'*/ + req.url + ".html";
+                                file = options.base /* './public/html'*/ + req.url + ".html";
                                 if (grunt.file.exists(file)) {
                                     require('fs').createReadStream(file).pipe(res);
                                     return;
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
         },
         // Sass Config
         sass: {
-            dist: {                            // Target
+            dist: { // Target
                 options: {
                     implementation: sass,
                     sourceMap: false,
@@ -223,4 +223,3 @@ module.exports = function(grunt) {
         'sass'
     ]);
 };
-

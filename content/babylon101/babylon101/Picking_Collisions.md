@@ -4,52 +4,52 @@ PG_TITLE: 12. Picking Collisions
 ---
 # Picking Collisions
 
-In picking an object with your mouse the main difficulty is to click on a 3D object whereas your screen is a flat 2D display.
+При выборе объекта с помощью мыши основная трудность заключается в нажатии на 3D-объект, тогда как ваш экран представляет собой плоский 2D-дисплей..
 
-Let’s see how we can get your mouse position transposed in your 3D scene by this gun shooting example:
+Давайте посмотрим, как мы можем изменить положение мыши в 3D-сцене на следующем примере:
 
 
 ![Picking](/img/how_to/Collisions%20PickResult/11.png)
 
 _Final result_
 
-## How can I do this ?
+## Как я могу это сделать ?
 
-Babylon engine lets you do this very easily by giving you useful functions.
+Babylon engine позволяет вам сделать это очень легко, предоставляя вам полезные функции.
 
-First of all, after creation of a plane representing the wall, and a plane with our impact’s picture, we have to detect a click on the UI (User Interface). Once the event is raised, use the function “pick” to get some powerful information about the relation between your click and your scene.
+Прежде всего, после создания плоскости, представляющей стену, и плоскости с изображением нашего удара, мы должны обнаружить щелчок по UI (User Interface). Как только событие поднято, используйте функцию “pick” чтобы получить полезную информацию о связи между вашим кликом и вашей сценой.
 ```javascript
-//When click event is raised
+//Когда происходит событие клика
 window.addEventListener("click", function () {
-   // We try to pick an object
+   // Мы пытаемся выбрать объект
    var pickResult = scene.pick(scene.pointerX, scene.pointerY);
 }),
 ```
  
-The pickResult object is mainly composed of 4 pieces of information:
+Объект pickResult в основном состоит из 4 частей информации:
 
-1. _hit_ (bool): « True » if your click hits an object in the scene.
-1. _distance_ (float): the “distance” between the active camera and your hit (infinite if no mesh was hit)
-1. _pickedMesh_ (BABYLON.Mesh): if you hit an object, this is the selected mesh. If not, it’s null.
-1. _pickedPoint_ (BABYLON.Vector3): the point you have clicked, transformed in 3D coordinates, depending on the object you’ve clicked. Null if no hit.
+1. _hit_ (bool): « True » если ваш клик попадает на объект в сцене.
+1. _distance_ (float): “distance” между активной камерой и вашим попаданием (бесконечность, если нет меша)
+1. _pickedMesh_ (BABYLON.Mesh): если вы попали в объект, это выбранный меш. Если нет, то это null.
+1. _pickedPoint_ (BABYLON.Vector3): точка, которую вы щелкнули, преобразуется в трехмерные координаты в зависимости от объекта, на который вы щелкнули. Null если попадания никуда не произошло.
 
-Now we have all the data we need to build our scene. We just have to position our gun’s impact picture (a plane made earlier... called impact) when the user clicks on the wall plane:
+Теперь у нас есть все данные, необходимые для построения нашей сцены. Нам просто нужно расположить изображение удара нашего пистолета (плоскость, сделанная ранее... называется воздействие) когда пользователь нажимает на плоскость стены:
 ```javascript
-// if the click hits the wall object, we change the impact picture position
+// если щелчок касается объекта стены, мы меняем положение изображения удара
 if (pickResult.hit) {
             impact.position.x = pickResult.pickedPoint.x;
             impact.position.y = pickResult.pickedPoint.y;
 }
 ```
-Fast, and easy, isn’t it?
+Быстро и легко, не так ли?
 
-Feel free to play with this scene... [at our online playground]( https://www.babylonjs-playground.com/?11).
+Не стесняйтесь играть с этой сценой... [at our online playground]( https://www.babylonjs-playground.com/?11).
 
-## Advanced Picking Features
+## Продвинутые функции пикинга
 
-Please note that the pickResult object can provide you with additional information, detailed below:
+Обратите внимание, что объект pickResult может предоставить вам дополнительную информацию, подробно описано ниже:
 
-- `faceId`: this is the position of the picked face's indices in the indices array. These can be accessed like so:
+- `faceId`: это позиция индекса выбранного фейса в массиве индексов. К ним можно получить доступ так:
 ```
 var indices = pickResult.pickedMesh.getIndices();
 var index0 = indices[pickResult.faceId * 3];
@@ -57,26 +57,26 @@ var index1 = indices[pickResult.faceId * 3 + 1];
 var index2 = indices[pickResult.faceId * 3 + 2];
 ```
 
-- `submeshId`: the ID of the picked submesh inside the picked mesh
+- `submeshId`: ID субмеша по которому пикнули внутри пикнутого меша
 
-- `bu` and `bv` properties: these are the barycentric coordinates of the picked point in the face. The picked face is a polygon composed of 3 vertices, and the picked point is the barycenter of those three vertices with the following weights:
+- свойства `bu` и `bv` : это барицентрические координаты точки касания пика в пикнутом фейсе. Picked face это треугольный полигон состоящий из 3 вершин, а пикнутая точка это barycenter этих трех вершин со следующими весами:
 
-  * `1 - bu - bv` for the vertex n. 0
-  * `bu` for the vertex n. 1
-  * `bv` for the vertex n. 2
+  * `1 - bu - bv` для вершины n. 0
+  * `bu` для вершины n. 1
+  * `bv` для вершины n. 2
 
-- `getTextureCoordinates()`: computes the texture coordinates of the picked point; these will be returned as a `Vector2` in texture space, which means its coordinates will be between 0 and 1.
+- `getTextureCoordinates()`: вычисляет координаты текстуры выбранной точки; они будут возвращены как `Vector2` в текстурном протстранстве, что означает, что его координаты будут между 0 и 1.
 
-Possible uses include:
+Возможное использование включает:
 
-- Drawing on a texture using a DynamicTexture,
-- Modifying a face that was hit (delete, move vertices, change color...),
-- Changing a submesh material,
-- etc.
+- Рисование текстуры с помощью DynamicTexture,
+- Изменение грани, которое было задето (delete, move vertices, change color...),
+- Смена материала субмеша,
+- и т.п.
 
 
 ## Next step
-This collision method is convenient in a lot of situations. Once you understand mouse pick events, you can begin using that functionality to advance your application’s development. Now it is time to learn how to find where a thin line collides or intersects with a mesh using [raycasts](/babylon101/Raycasts)
+Этот метод столкновения удобен во многих ситуациях. Как только вы поймете события выбора мышью, вы можете начать использовать эту функциональность для продвижения разработки вашего приложения. Теперь пришло время узнать, как найти, где тонкая линия сталкивается или пересекается с сеткой, используя [raycasts](/babylon101/Raycasts)
 
 # Further Reading
 

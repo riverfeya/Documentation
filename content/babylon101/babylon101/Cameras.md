@@ -4,28 +4,27 @@ PG_TITLE: Cameras
 ---
 # Cameras
 
-Of the many cameras available in Babylon.js the two most used are probably - the Universal Camera used for First Person Movement and the Arc Rotate Camera which is an orbital camera. Though with the advent of WebVR this may change.
+Из многих камер, доступных в Babylon.js, наиболее часто используются две - универсальная камера, используемая для движения от первого лица, и камера с поворотом дуги, которая является орбитальной камерой. Хотя с появлением WebVR это может измениться.
 
-For input control by the user all cameras need to be attached to the canvas once constructed using
+Для контроля ввода пользователем все камеры должны быть прикреплены к холсту после его создания
 
 ```javascript
 camera.attachControl(canvas, true);
 ```
-The second parameter is optional and defaults to **false**. When **false** then default actions on a canvas event are prevented. Set to true to allow canvas default actions.
+Второй параметр является необязательным и по умолчанию **false**. Ult **false** тогда действия по умолчанию для события холста будут предотвращены. Установите значение true, чтобы разрешить действия по умолчанию для холста.
 
 **Notes**
 
-1. A [Gamepad](/How_To/how_to_use_gamepads) may be used a controller.
-2. For touch control either [PEP](https://github.com/jquery/PEP) or [hand.js](https://github.com/Deltakosh/handjs) is needed.
+1. A [Gamepad](/How_To/how_to_use_gamepads) может быть использован контроллер.
+2. Для сенсорного управления либо [PEP](https://github.com/jquery/PEP) или [hand.js](https://github.com/Deltakosh/handjs) is needed.
 
-## Universal Camera
+## Универсальная камера
 
-This was introduced with version 2.3 of Babylon.js and is controlled by the keyboard, mouse, touch or [gamepad](/How_To/how_to_use_gamepads) depending on the input device used, with no need for the controller to be specified. This extends and replaces the [Free Camera](/classes/3.0/freecamera), the [Touch Camera](/classes/3.0/touchcamera) and the [Gamepad Camera](classes/3.0/gamepadcamera) which are all still available.
+Это было введено в версии 2.3 Babylon.js и управляется клавиатурой, мышью, сенсорным или [gamepad](/How_To/how_to_use_gamepads) в зависимости от используемого устройства ввода, при этом не требуется указывать контроллер. Это расширяет и заменяет [Free Camera](/classes/3.0/freecamera),  [Touch Camera](/classes/3.0/touchcamera) и [Gamepad Camera](classes/3.0/gamepadcamera) которые все еще доступны.
 
-The Universal Camera is now the default camera used by Babylon.js if nothing is specified, and it’s your best choice if you’d like to have a FPS-like control in your scene.
-All demos on babylonjs.com are based upon that feature. Plug a Xbox controller into your PC and using it you’ll still be able to navigate most of the demos.
+Universal Camera теперь является камерой по умолчанию, используемой Babylon.js, если ничего не указано, и это ваш лучший выбор, если вы хотите иметь FPS-подобный элемент управления в вашей сцене. Все демонстрации на babylonjs.com основаны на этой функции. Подключите контроллер Xbox к своему ПК, и с его помощью вы все равно сможете перемещаться по большинству демонстраций.
 
-The default actions are:
+Действия по умолчанию:
 
 1. Keyboard - The left and right arrows move the camera left and right, and up and down arrows move it forwards and backwards;
 
@@ -57,15 +56,13 @@ The default actions are:
 
 ## Arc Rotate Camera
 
-This camera always points towards a given target position and can be rotated around that target with the target as the center of rotation.
-It can be controlled with cursors and mouse, or with touch events.
+Эта камера всегда указывает на заданную позицию цели и может вращаться вокруг этой цели с целью в качестве центра вращения. Им можно управлять с помощью курсоров и мыши или сенсорных событий.
 
-Think of this camera as one orbiting its target position, or more imaginatively as a spy satellite orbiting the earth. Its position relative to the target (earth) can be set by three parameters, _alpha_ (radians) the longitudinal rotation, _beta_ (radians) the latitudinal rotation and  _radius_ the distance from the target position.
-Here is an illustration:
+Думайте об этой камере как о той, которая находится на орбите относительно своей цели, или, более точно, образно, как спутник-шпион, вращающийся вокруг Земли. Его положение относительно цели (земли) может быть задано тремя параметрами: _альфа_ (радианы) продольного вращения, _бета_ (радианы) широтного вращения и _радиус_ расстояния от позиции цели. Вот иллюстрация:
 
 ![arc rotate camera](/img/how_to/camalphabeta.jpg)
 
-Setting _beta_ to 0 or PI can, for technical reasons, cause problems and in this situation _beta_ is offset by 0.1 radians (about 0.6 degrees).
+Установка _beta_ в 0 или PI может по техническим причинам вызвать проблемы и в этой ситуации _beta_ is offset by 0.1 radians (about 0.6 degrees).
 
 Both _alpha_ and _beta_ increase in a clockwise direction.
 
@@ -103,18 +100,17 @@ If required you can also totally deactivate panning by setting :
 
 ## FollowCamera
 
-The Follow Camera does what it says on the tin. Give it a mesh as a target and from whatever position it is currently at it will move to a goal position from which to view
-the target. When the target moves so will the Follow Camera.
+Follow Camera делает то, что исходит из ее названия. Дайте ему меш в качестве цели, и из любой позиции, в которой он находится в данный момент, он переместится в позицию цели, из которой можно увидеть цель. Когда цель движется, Follow Camera.
 
-The initial position of the Follow Camera is set when it is created then the goal position is set with three parameters:
+Начальная позиция Follow Camera устанавливается при его создании, тогда позиция цели задается тремя параметрами:
 
-1. the distance from the target - camera.radius;
+1. расстояние от цели - camera.radius;
 
-2. the height above the target - camera.heightOffset;
+2. высота над целью - camera.heightOffset;
 
-3. the angle in degrees around the target in the x y plane.
+3. угол в градусах вокруг цели в x y плоскости.
 
-The speed with which the camera moves to a goal position is set through its acceleration (camera.cameraAcceleration) up to a maximum speed (camera.maxCameraSpeed).
+Скорость, с которой камера перемещается в положение цели, задается через ее ускорение (camera.cameraAcceleration) до максимальной скорости (camera.maxCameraSpeed).
 
 ### Constructing a Follow Camera
 
@@ -123,25 +119,25 @@ The speed with which the camera moves to a goal position is set through its acce
 // Parameters: name, position, scene
 var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
 
-// The goal distance of camera from target
+// Расстояние до цели камеры от цели
 camera.radius = 30;
 
-// The goal height of camera above local origin (centre) of target
+// Высота цели камеры над местным происхождением (центром) цели
 camera.heightOffset = 10;
 
-// The goal rotation of camera around local origin (centre) of target in x y plane
+// Вращение цели камеры вокруг локального начала (центра) цели в плоскости xy
 camera.rotationOffset = 0;
 
-// Acceleration of camera in moving from current to goal position
+// Ускорение камеры при переходе от текущей позиции к цели
 camera.cameraAcceleration = 0.005
 
-// The speed at which acceleration is halted
+// Скорость, с которой ускорение останавливается
 camera.maxCameraSpeed = 10
 
-// This attaches the camera to the canvas
+// Это прикрепляет камеру к холсту
 camera.attachControl(canvas, true);
 
-// NOTE:: SET CAMERA TARGET AFTER THE TARGET'S CREATION AND NOTE CHANGE FROM BABYLONJS V 2.5
+// NOTE:: УСТАНОВИТЕ ЦЕЛЬ КАМЕРЫ ПОСЛЕ СОЗДАНИЯ ЦЕЛЕВА И ИЗМЕНЕНИЯ НОТЫ ИЗ BABYLONJS V 2.5
 // targetMesh created here.
 camera.target = targetMesh;   // version 2.4 and earlier
 camera.lockedTarget = targetMesh; //version 2.5 onwards
@@ -294,7 +290,7 @@ This camera deserves a page to itself so here it is [Using the WebVR Camera](/Ho
 
 ## FlyCamera
 
-This camera imitates free movement in 3D space, think "a ghost in space." It comes with an option to gradually correct Roll, and also an option to mimic banked-turns.
+Эта камера имитирует свободное движение в трехмерном пространстве, подобно «призраку в космосе». Она поставляется с возможностью постепенного исправления крена, а также с возможностью имитации разворотных кругов.
 
 Its defaults are:
 

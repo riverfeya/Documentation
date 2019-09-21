@@ -130,11 +130,11 @@ var createScene = function () {
 
 1. В приведенных выше примерах используется более новый метод MeshBuilder для создания форм где переменные для формы задаются в параметре объекта параметров и имеют некоторые преимущества по сравнению со старой формой BABYLON.Mesh.Create.... который использует список параметров для переменных формы. Большая часть Playgrounds используйте старый метод, так как многие были созданы до появления MeshBuilder. 
 
-2. The use of PEP for pointer events is more recent advice, older advice was to use a system called hand.js. Both work, although hand.js is no longer maintained. You may still find references to hand.js in the documentation. 
+2. Использование PEP для событий указателя является более свежим советом, более старым советом было использование системы под названием hand.js. Оба работают, хотя hand.js больше не поддерживается. Вы все еще можете найти ссылки на hand.js в документации. 
 
 # Next Step
 
-Now you are ready to go further and learn how to create more shapes like spheres, cylinders, boxes, etc. by visiting [Set Shapes](/babylon101/Discover_Basic_Elements)
+Теперь вы готовы пойти дальше и научиться создавать больше фигур, таких как сферы, цилиндры, коробки и т. Д., Посетив [Set Shapes](/babylon101/Discover_Basic_Elements)
 
 # Further Reading External
 [BabylonJS Forum](https://forum.babylonjs.com)  

@@ -3,44 +3,44 @@ ID_PAGE: 22081
 PG_TITLE: 08. Animations
 ---
 # Animation
-Your scene is beginning to look great, but it is very static. To put dynamics in it, we are going to learn how to tell your computer to move your meshes in any way you choose.
+Ваша сцена начинает выглядеть великолепно, но она очень статичная. Чтобы придать динамику этому, мы узнаем, как заставить компьютер перемещать сетки любым способом, который вы выберете..
 
 ![Elements](/img/how_to/Animations/07.png)
 
 _Final result_
 
-There are two primary ways of doing animations in your scene. The first is to define a collection of keys and defining your object's situation at each key. The second way is for more complex animations, when you change animation code at run time.
+Есть два основных способа сделать анимацию в вашей сцене. Первый - определить набор ключей и определить ситуацию вашего объекта для каждого ключа. The second way is for more complex animations, when you change animation code at run time.
 
 ## Basic animation
 
-The animation is based on objects called Animation (!!). An Animation is defined by various properties and a collection of keys. Every key represents the value of the Animation at that key's given time.
+Анимация основана на объектах, называемых Animation (!!). Animation определяется различными свойствами и набором ключей.Каждый ключ представляет значение Animation в этом заданном ключе времени.
 
-To achieve today’s animated scene, we begin by creating our environment:
+Чтобы достичь современной анимационной сцены, мы начинаем с создания нашей среды:
 
 ```javascript
 function createScene() {
-  //Here... your basic scene as before: [scene, light, camera]
+  //Здесь ... ваша основная сцена, как и раньше: [scene, light, camera]
   
-  //Create a box
+  //создаем бокс
   var box1 = BABYLON.Mesh.CreateBox("Box1", 10.0, scene);
   box1.position.x = -20;
 ```
 
-Our goal: move this “box1”. First, create our Animation object:
+Наша цель: переместить “box1”. Во-первых, создайте наш объект Animation:
 
 ```javascript
 var animationBox = new BABYLON.Animation("myAnimation", "scaling.x", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
 ```
 
-Much information is in the parameters:
+Много информации в параметрах:
 
-**Parameter 1** - Name of this animation, nothing more.
+**Parameter 1** - Название этой анимации, не более.
 
-**Parameter 2** - The property concerned. This can be any mesh property, depending upon what you want to change. Here we want to scale an object on the X axis, so it will be “scaling.x”.
+**Parameter 2** - The property concerned. Это может быть свойство меш, в зависимости от того, что вы хотите изменить. Здесь мы хотим масштабировать объект по X оси, так будет “scaling.x”.
 
-**Parameter 3** - Frames per second requested: highest FPS possible in this animation.
+**Parameter 3** - Запрошено кадров в секунду: максимальный FPS возможен в этой анимации.
 
-**Parameter 4** - Type of change. Here you decide and enter what kind of value will be modified: is it a float (e.g. a translation), a vector (e.g. a direction), or a quaternion. Exact values are:
+**Parameter 4** - Тип изменения. Здесь вы решаете и вводите, какое значение будет изменено: это float (e.g. a translation),  vector (e.g. a direction), или quaternion. Точные значения:
 
 * ```BABYLON.Animation.ANIMATIONTYPE_FLOAT```
 * ```BABYLON.Animation.ANIMATIONTYPE_VECTOR2```

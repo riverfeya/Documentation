@@ -1,9 +1,8 @@
 # Mesh Writer
 
-Generate letters in BABYLON meshes.
+Генерация букы в BABYLON meshes.
 
 ### Basic-Usage
-
 	Writer = BABYLON.MeshWriter(scene, {scale:scale});
 	text1  = new Writer( 
 	                "ABC",
@@ -17,17 +16,17 @@ Generate letters in BABYLON meshes.
 	                }
 	            );
 
-&#9679; See playground example:  https://www.babylonjs-playground.com/#PL752W#1
+&#9679; Смотрите пример playground:  https://www.babylonjs-playground.com/#PL752W#1
 
 ### Getting the code
 
-Copy https://github.com/BabylonJS/Extensions/blob/master/MeshWriter/meshwriter.min.js or https://github.com/BabylonJS/Extensions/blob/master/MeshWriter/meshwriter.js and build it into your load sequence.
+Copy https://github.com/BabylonJS/Extensions/blob/master/MeshWriter/meshwriter.min.js or https://github.com/BabylonJS/Extensions/blob/master/MeshWriter/meshwriter.js и встроить его в вашу последовательность загрузки.
 
 ### Superconstructor - BABYLON.MeshWriter()
 
-After MeshWriter is loaded, BABYLON.MeshWriter is defined.  It is called with one or two parameters.
+После того как MeshWriter был загружен, BABYLON.MeshWriter объявляется.  Вызывается с одним или двумя параметрами.
 - **scene** &nbsp; required
-- **preferences** &nbsp; optional &nbsp; The preferences object may specify up to three values
+- **preferences** &nbsp; optional &nbsp; Объект предпочтений может указывать до трех значений
 
 	      FIELD                 DEFAULT
 	    default-font           Helvetica

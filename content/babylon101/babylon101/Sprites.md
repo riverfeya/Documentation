@@ -5,16 +5,16 @@ PG_TITLE: 09. Sprites
 
 # Sprites
 
-In this tutorial, we are going to learn how to manipulate Sprites. Sprites are 2D image/animation, and we will use them to display an image with alpha channel. Sprites always face the camera.
+В этом уроке мы научимся манипулировать Sprites. Sprites это 2D image/animation, и мы будем использовать их для отображения изображения с альфа-каналом. Sprites всегда лицом к камере.
 
-Nowadays, sprites are often used to display animated characters, and for particles, and to simulate 3D complex objects like trees.
+В наше время, sprites часто используются для отображения анимированных персонажей и для частиц, а также для моделирования сложных 3D-объектов, таких как деревья.
 
-Individual sprites are collected together in a single image file called a spritesheet or texture atlas. 
+Отдельные спрайты собираются вместе в один файл изображения, называемый spritesheet или texture atlas. 
 
-* A uniform spritesheet is one where all the sprites are exactly the same size and arranged in order in the file. When you read the term spritesheet in the documentation you can usually assume that it is referring to a uniform spritesheet. A uniform spritesheet is overseen by a [Sprite Manager](#sprite-manager).
-* A packed spritesheet is one where the sprites can be of different sizes and often packed in such a way as to minimize the overall size of the file. Usually the full term of _packed spritesheet_ will be used for such a spritesheet. A packed spritesheet is overseen by a [Sprite Packed Manager](#sprite-packed-manager). This is available from BJS version 4.1
+* Uniform spritesheet это тот, где все спрайты имеют одинаковый размер и расположены по порядку в файле. Когда вы читаете термин spritesheet в документации, вы обычно можете предположить, что он относится к uniform spritesheet. Uniform spritesheet контролируется [Sprite Manager](#sprite-manager).
+* Упакованный spritesheet это тот, где спрайты могут быть разных размеров и часто упакованы таким образом, чтобы минимизировать общий размер файла. Обычно полный термин _packed spritesheet_ будет использоваться для такого spritesheet. Packed spritesheet управляется [Sprite Packed Manager](#sprite-packed-manager). Это доступно в BJS version 4.1
 
-For sprites the use of one of these managers is mandatory, even for one sprite. They optimize GPU resources by grouping in one place multiple instances of a sprite.
+Для спрайтов использование одного из этих менеджеров обязательно, даже для одного спрайта. Они оптимизируют ресурсы GPU, группируя в одном месте несколько экземпляров спрайта.
 
 ![Elements](/img/how_to/Sprites/08.png)
 
@@ -23,48 +23,48 @@ _Final result_
 
 ## Sprite Manager
 
-For sprites of the same size you use
+Для спрайтов того же размера вы используете
 
 ```javascript
-// Create a sprite manager
+// Создать менеджер спрайтов
 var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", "Assets/Palm-arecaceae.png", 2000, 800, scene);
 ```
 
-When creating a sprite manager, you have to decide a few parameters:
-* Name: a name for this manager.
-* The 2D image URL (most of the time, you will want use an image format which contain alpha channel, like .PNG).
-* The capacity of this manager : the maximum number of instances in this manager (in our example, we could create 2000 instances of trees).
-* The cell size, corresponding to the size of your image, like we’ll see below. Please note that cellSize could be a number or an object made of a width and height properties (Later on you will be able to also specify `spriteManager.cellWidth` and `spriteManager.cellHeight`)
-* The actual scene, to which we will add this manager.
+При создании диспетчера спрайтов вы должны выбрать несколько параметров:
+* Name: имя для этого менеджера.
+* URL-адрес 2D-изображения (в большинстве случаев вам нужно использовать формат изображения, содержащий альфа-канал, например .PNG).
+* Емкость этого менеджера: максимальное количество экземпляров в этом менеджере (в нашем примере мы можем создать 2000 экземпляров деревьев).
+* Размер ячейки, соответствующий размеру вашего изображения, как мы увидим ниже. Обратите внимание, что cellSize может быть числом или объектом из свойств width и height. (Позже вы сможете также указать `spriteManager.cellWidth` и `spriteManager.cellHeight`)
+* Реальная сцена, к которой мы добавим этого менеджера.
 
-To give another example, look at this snippet:
+Чтобы привести другой пример, посмотрите на этот фрагмент:
 ```javascript
 var spriteManagerPlayer = new BABYLON.SpriteManager("playerManager","Assets/Player.png", 2, {width: 64, height: 64}, scene);
 ```
 
-This time, we only want 2 instances, and we said that our sprite’s size is 64x64. Here is what our image looks like:
+На этот раз мы хотим только 2 экземпляра, и мы сказали, что размер нашего спрайта составляет 64x64. Вот как выглядит наше изображение:
 
 ![Elements](/img/how_to/Sprites/08-1.png)
 
-Each image of a sprite must be contained in a 64 pixel square, no more no less.
+Каждое изображение спрайта должно содержаться в квадрате размером 64 пикселя, не больше и не меньше.
 
 ## Sprite Packed Manager
 
-For sprites of varying sizes you need an image file and a JSON file containing the positional data of the sprites in the packed spritesheet. The image file and the JSON file should have the same name and be in the same folder, eg pack1.png and pack1.json.
+Для спрайтов разных размеров вам нужен файл изображения и файл JSON, содержащий данные о положении спрайтов в упакованной таблице спрайтов. Файл изображения и файл JSON должны иметь одинаковые имена и находиться в одной папке, например, pack1.png и pack1.json.
 
-For example:
+Например:
 ```javascript
 var spm = new BABYLON.SpritePackedManager("spm", "pack1.png", 4, scene);
 ```
-The parameters are:
-* Name: a name for this manager.
-* The 2D image URL (most of the time, you will want use an image format which contain alpha channel, like .PNG).
-* The capacity of this manager : the maximum number of instances in this manager (in our example 4).
-* The scene, to which we will add this manager.
+Параметры:
+* Name: имя для этого менеджера.
+* URL-адрес 2D-изображения (в большинстве случаев вам нужно использовать формат изображения, содержащий альфа-канал, например .PNG).
+* Емкость этого менеджера: максимальное количество экземпляров в этом менеджере (в нашем примере 4).
+* Сцена, к которой мы добавим этот менеджер.
 
-It is also possible to reference an existing JSON object, of the correct format, directly. In this case the JSON object is passed as an additional parameter. For example:
+Также можно напрямую ссылаться на существующий объект JSON правильного формата. В этом случае объект JSON передается в качестве дополнительного параметра. Например:
 
-For example:
+Например:
 ```javascript
 var spm = new BABYLON.SpritePackedManager("spm", "pack1.png", 4, scene, JSONObject);
 ```
@@ -73,7 +73,7 @@ var spm = new BABYLON.SpritePackedManager("spm", "pack1.png", 4, scene, JSONObje
 
 ![Packed Spritesheet](/img/how_to/Sprites/pack1.png);
 
-The JSON format for the above file is based on that produced using the _TexturePacker_ app with output file framework set to JSON(Hash) and Trim to None and Allow Rotation to Off. For the above packed spritesheet _TexturePacker_ outputs
+Формат JSON для вышеуказанного файла основан на формате, созданном с использованием _TexturePacker_ приложение с установленной структурой выходного файла JSON(Hash) и Trim до None и Allow Rotation в Off. Для указанного выше packed spritesheet _TexturePacker_ outputs
 
 ```javascript
 {   "frames": {
@@ -119,7 +119,7 @@ The JSON format for the above file is based on that produced using the _TextureP
 }
 ```
 
-SpritePackedManager only uses the frame property for each sprite so the minimal JSON format is
+SpritePackedManager использует только свойство frame для каждого спрайта, поэтому минимальный формат JSON
 
 ```javascript
 {   "frames": {
@@ -141,24 +141,24 @@ SpritePackedManager only uses the frame property for each sprite so the minimal 
 
 ## Create A Sprite Instant
 
-For both managers, we can create instances of a sprite linked to a manager. Creating an instance is as simple as:
+Для обоих менеджеров мы можем создать экземпляры спрайта, связанные с менеджером. Создать экземпляр так же просто, как:
 
 ```javascript
 var sprite = new BABYLON.Sprite("sprite", manager);
 ```
 
-which uses the first sprite on the sheet
+который использует первый спрайт на листе
 
-Using a uniform spritesheet and SpriteManager you indicate which sprite to use will cellIndex, counting from the top sprite on the left in order right and down.
+С помощью uniform spritesheet и SpriteManager Вы указываете, какой спрайт использовать будет cellIndex, считая от верхнего спрайта слева по порядку вправо и вниз.
 
-For example
+Например
 
 ```javascript
 var sprite = new BABYLON.Sprite("sprite", manager);
 sprite.cellIndex = 2;
 ```
 
-Using a packed spritesheet and SpritePackedManager you can either use cellIndex, as above, or the cellRef, the name of sprite. 
+С помощью packed spritesheet и SpritePackedManager Вы можете использовать cellIndex, как указано выше, или cellRef, имя спрайта. 
 
 For example
 ```javascript
@@ -166,42 +166,42 @@ var sprite = new BABYLON.Sprite("sprite", manager);
 sprite.cellRef = "spot.png";
 ```
 
-You can change its size, orientation or reflection:
+Вы можете изменить его размер, ориентацию или отражение:
 ```javascript
 sprite.size = 0.3;
 sprite.angle = Math.PI/4;
 sprite.invertU = -1;
 ```
 
-Starting with Babylon.js v2.1, you can define the sprite's width and height:
+Начиная с Babylon.js v2.1, Вы можете определить для спрайта width и height:
 ```
 sprite.width = 0.3;
 sprite.height = 0.4;
 ```
 
-you can manipulate it like any other meshes:
+вы можете манипулировать им, как и любыми другими сетками:
 ```javascript
 sprite.position.y = -0.3;
 ```
 
 ## Sprite Animation
 
-One of the advantages of sprites is animations. The most straight forward way is to use a uniform spritesheet and SpriteManager. You only have to load one large image file which will contain all animation images, one next to another. Just be careful to respect the pixel size that you have specified in the manager.
-For example with this spritesheet of players:
+Одним из преимуществ спрайтов является анимация. Самый прямой путь заключается в использовании uniform spritesheet и SpriteManager. Вам нужно только загрузить один большой файл изображения, который будет содержать все анимационные изображения, одно рядом с другим. Просто будьте внимательны с размером пикселя, который вы указали в менеджере.
+Например, с помощью этой таблицы игроков:
 
 ![Elements](/img/how_to/Sprites/08-2.png)
 
-We can use this to animate our players in more than 40 positions, depending upon the situation (walking, jumping,…). 
+Мы можем использовать это для анимации наших игроков в более чем 40 позициях, в зависимости от ситуации (ходьба, прыжки, ...). 
 
-If you want to begin the animation, simply call this function:
+Если вы хотите начать анимацию, просто вызовите эту функцию:
 ```javascript
 player.playAnimation(0, 43, true, 100);
 ```
-The player sprite will be animated from frame 0 to frame 43. The third parameter is indicating if this animation will loop or not, true to loop. The last parameter is the delay between the frames (the smaller it is, the faster the animation).
+Спрайт игрока будет анимирован с кадра 0 до кадра 43. Третий параметр указывает, будет ли эта анимация цикличной или нет, верна ли петля. Последний параметр - это задержка между кадрами (чем она меньше, тем быстрее анимация).
 
 * [Playground Example Animation of Uniform Sprites**]( https://www.babylonjs-playground.com/?8).
 
-It is also possible to use playAnimation with sprites from a packed spritesheet. It is worth double checking that the sprites to animate are consecutive and in the correct order in the JSON file.
+Также можно использовать playAnimation со спрайтами из packed spritesheet. Стоит дважды проверить, что спрайты для анимации являются последовательными и в правильном порядке в файле JSON.
 
 ## Packed SpriteSheet Playground Examples
 
@@ -214,7 +214,7 @@ It is also possible to use playAnimation with sprites from a packed spritesheet.
 * [Playground Example Multi Pick Sprites](https://www.babylonjs-playground.com/#5GX5DZ)
 
 ## Next Step
-Having learnt about sprites, so it’s time to move on to use them in a classic effect in 3D : [particles](/babylon101/Particles).
+Узнав о спрайтах, пришло время перейти к использованию их в классическом 3D : [particles](/babylon101/Particles).
 
 # Further Reading
 

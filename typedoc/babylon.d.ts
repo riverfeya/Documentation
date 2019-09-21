@@ -2068,6 +2068,13 @@ declare module BABYLON {
          */
         rotateByQuaternionAroundPointToRef(quaternion: Quaternion, point: Vector3, result: Vector3): Vector3;
         /**
+         * Returns a new Vector3 as the cross product of the current vector and the "other" one
+         * The cross product is then orthogonal to both current and "other"
+         * @param other defines the right operand
+         * @returns the cross product
+         */
+        cross(other: Vector3): Vector3;
+        /**
          * Normalize the current Vector3 with the given input length.
          * Please note that this is an in place operation.
          * @param len the length of the vector
@@ -13885,7 +13892,7 @@ declare module BABYLON {
          * @param newParent defines the new parent to use for the instance (or clone)
          * @returns an instance (or a clone) of the current node with its hiearchy
          */
-        instantiateHierarychy(newParent?: Nullable<TransformNode>): Nullable<TransformNode>;
+        instantiateHierarchy(newParent?: Nullable<TransformNode>): Nullable<TransformNode>;
         /**
          * Prevents the World matrix to be computed any longer
          * @param newWorldMatrix defines an optional matrix to use as world matrix
@@ -14553,7 +14560,7 @@ declare module BABYLON {
 }
 declare module BABYLON {
     /**
-     * Reprasents a camera frustum
+     * Represents a camera frustum
      */
     export class Frustum {
         /**
@@ -15551,6 +15558,10 @@ declare module BABYLON {
      * @see http://doc.babylonjs.com/babylon101/materials#texture
      */
     export class Texture extends BaseTexture {
+        /**
+         * Gets or sets a general boolean used to indicate that textures containing direct data (buffers) must be saved as part of the serialization process
+         */
+        static SerializeBuffers: boolean;
         /** @hidden */
         static _CubeTextureParser: (jsonTexture: any, scene: Scene, rootUrl: string) => CubeTexture;
         /** @hidden */
@@ -15945,6 +15956,88 @@ declare module BABYLON {
          * @param updateFunc defines the callback function used to get the final value from the selected gradients
          */
         static GetCurrentGradient(ratio: number, gradients: IValueGradient[], updateFunc: (current: IValueGradient, next: IValueGradient, scale: number) => void): void;
+    }
+}
+declare module BABYLON {
+    /**
+     * A class extending Texture allowing drawing on a texture
+     * @see http://doc.babylonjs.com/how_to/dynamictexture
+     */
+    export class DynamicTexture extends Texture {
+        private _generateMipMaps;
+        private _canvas;
+        private _context;
+        private _engine;
+        /**
+         * Creates a DynamicTexture
+         * @param name defines the name of the texture
+         * @param options provides 3 alternatives for width and height of texture, a canvas, object with width and height properties, number for both width and height
+         * @param scene defines the scene where you want the texture
+         * @param generateMipMaps defines the use of MinMaps or not (default is false)
+         * @param samplingMode defines the sampling mode to use (default is Texture.TRILINEAR_SAMPLINGMODE)
+         * @param format defines the texture format to use (default is Engine.TEXTUREFORMAT_RGBA)
+         */
+        constructor(name: string, options: any, scene: Scene | null | undefined, generateMipMaps: boolean, samplingMode?: number, format?: number);
+        /**
+         * Get the current class name of the texture useful for serialization or dynamic coding.
+         * @returns "DynamicTexture"
+         */
+        getClassName(): string;
+        /**
+         * Gets the current state of canRescale
+         */
+        readonly canRescale: boolean;
+        private _recreate;
+        /**
+         * Scales the texture
+         * @param ratio the scale factor to apply to both width and height
+         */
+        scale(ratio: number): void;
+        /**
+         * Resizes the texture
+         * @param width the new width
+         * @param height the new height
+         */
+        scaleTo(width: number, height: number): void;
+        /**
+         * Gets the context of the canvas used by the texture
+         * @returns the canvas context of the dynamic texture
+         */
+        getContext(): CanvasRenderingContext2D;
+        /**
+         * Clears the texture
+         */
+        clear(): void;
+        /**
+         * Updates the texture
+         * @param invertY defines the direction for the Y axis (default is true - y increases downwards)
+         * @param premulAlpha defines if alpha is stored as premultiplied (default is false)
+         */
+        update(invertY?: boolean, premulAlpha?: boolean): void;
+        /**
+         * Draws text onto the texture
+         * @param text defines the text to be drawn
+         * @param x defines the placement of the text from the left
+         * @param y defines the placement of the text from the top when invertY is true and from the bottom when false
+         * @param font defines the font to be used with font-style, font-size, font-name
+         * @param color defines the color used for the text
+         * @param clearColor defines the color for the canvas, use null to not overwrite canvas
+         * @param invertY defines the direction for the Y axis (default is true - y increases downwards)
+         * @param update defines whether texture is immediately update (default is true)
+         */
+        drawText(text: string, x: number, y: number, font: string, color: string, clearColor: string, invertY?: boolean, update?: boolean): void;
+        /**
+         * Clones the texture
+         * @returns the clone of the texture.
+         */
+        clone(): DynamicTexture;
+        /**
+         * Serializes the dynamic texture.  The scene should be ready before the dynamic texture is serialized
+         * @returns a serialized dynamic texture object
+         */
+        serialize(): any;
+        /** @hidden */
+        _rebuild(): void;
     }
 }
 declare module BABYLON {
@@ -18832,9 +18925,10 @@ declare module BABYLON {
          * @param name Define the name of the material in the scene
          * @param scene Define the scene the material belongs to
          * @param shaderPath Defines  the route to the shader code in one of three ways:
-         *     - object - { vertex: "custom", fragment: "custom" }, used with Effect.ShadersStore["customVertexShader"] and Effect.ShadersStore["customFragmentShader"]
-         *     - object - { vertexElement: "vertexShaderCode", fragmentElement: "fragmentShaderCode" }, used with shader code in <script> tags
-         *     - string - "./COMMON_NAME", used with external files COMMON_NAME.vertex.fx and COMMON_NAME.fragment.fx in index.html folder.
+         *  * object: { vertex: "custom", fragment: "custom" }, used with Effect.ShadersStore["customVertexShader"] and Effect.ShadersStore["customFragmentShader"]
+         *  * object: { vertexElement: "vertexShaderCode", fragmentElement: "fragmentShaderCode" }, used with shader code in script tags
+         *  * object: { vertexSource: "vertex shader code string", fragmentSource: "fragment shader code string" } using with strings containing the shaders code
+         *  * string: "./COMMON_NAME", used with external files COMMON_NAME.vertex.fx and COMMON_NAME.fragment.fx in index.html folder.
          * @param options Define the options used to create the shader
          */
         constructor(name: string, scene: Scene, shaderPath: any, options?: Partial<IShaderMaterialOptions>);
@@ -22032,7 +22126,7 @@ declare module BABYLON {
      * @see http://doc.babylonjs.com/how_to/how_to_use_lod
      */
     export class MeshLODLevel {
-        /** Defines the distance where this level should star being displayed */
+        /** Defines the distance where this level should start being displayed */
         distance: number;
         /** Defines the mesh to use to render this level */
         mesh: Nullable<Mesh>;
@@ -22042,7 +22136,7 @@ declare module BABYLON {
          * @param mesh defines the mesh to use to render this level
          */
         constructor(
-        /** Defines the distance where this level should star being displayed */
+        /** Defines the distance where this level should start being displayed */
         distance: number, 
         /** Defines the mesh to use to render this level */
         mesh: Nullable<Mesh>);
@@ -23486,7 +23580,7 @@ declare module BABYLON {
          * @param clonePhysicsImpostor When cloning, include cloning mesh physics impostor, default True.
          */
         constructor(name: string, scene?: Nullable<Scene>, parent?: Nullable<Node>, source?: Nullable<Mesh>, doNotCloneChildren?: boolean, clonePhysicsImpostor?: boolean);
-        instantiateHierarychy(newParent?: Nullable<TransformNode>): Nullable<TransformNode>;
+        instantiateHierarchy(newParent?: Nullable<TransformNode>): Nullable<TransformNode>;
         /**
          * Gets the class name
          * @returns the string "Mesh".
@@ -24921,6 +25015,10 @@ declare module BABYLON {
          * @return the direction
          */
         getDirection(localAxis: Vector3): Vector3;
+        /**
+         * Returns the current camera absolute rotation
+         */
+        readonly absoluteRotation: Quaternion;
         /**
          * Gets the direction of the camera relative to a given local axis into a passed vector.
          * @param localAxis Defines the reference axis to provide a relative direction.
@@ -27688,9 +27786,9 @@ declare module BABYLON {
          */
         gammaSpace: boolean;
         /**
-         * Gets whether or not the texture contains RGBD data.
+         * Gets or sets whether or not the texture contains RGBD data.
          */
-        readonly isRGBD: boolean;
+        isRGBD: boolean;
         /**
          * Is Z inverted in the texture (useful in a cube texture).
          */
@@ -36751,8 +36849,9 @@ declare module BABYLON {
         /**
          * Attaches the drag behavior the passed in mesh
          * @param ownerNode The mesh that will be dragged around once attached
+         * @param predicate Predicate to use for pick filtering
          */
-        attach(ownerNode: AbstractMesh): void;
+        attach(ownerNode: AbstractMesh, predicate?: (m: AbstractMesh) => boolean): void;
         /**
          * Force relase the drag action by code.
          */
@@ -40402,88 +40501,6 @@ declare module BABYLON {
     }
 }
 declare module BABYLON {
-    /**
-     * A class extending Texture allowing drawing on a texture
-     * @see http://doc.babylonjs.com/how_to/dynamictexture
-     */
-    export class DynamicTexture extends Texture {
-        private _generateMipMaps;
-        private _canvas;
-        private _context;
-        private _engine;
-        /**
-         * Creates a DynamicTexture
-         * @param name defines the name of the texture
-         * @param options provides 3 alternatives for width and height of texture, a canvas, object with width and height properties, number for both width and height
-         * @param scene defines the scene where you want the texture
-         * @param generateMipMaps defines the use of MinMaps or not (default is false)
-         * @param samplingMode defines the sampling mode to use (default is Texture.TRILINEAR_SAMPLINGMODE)
-         * @param format defines the texture format to use (default is Engine.TEXTUREFORMAT_RGBA)
-         */
-        constructor(name: string, options: any, scene: Scene | null | undefined, generateMipMaps: boolean, samplingMode?: number, format?: number);
-        /**
-         * Get the current class name of the texture useful for serialization or dynamic coding.
-         * @returns "DynamicTexture"
-         */
-        getClassName(): string;
-        /**
-         * Gets the current state of canRescale
-         */
-        readonly canRescale: boolean;
-        private _recreate;
-        /**
-         * Scales the texture
-         * @param ratio the scale factor to apply to both width and height
-         */
-        scale(ratio: number): void;
-        /**
-         * Resizes the texture
-         * @param width the new width
-         * @param height the new height
-         */
-        scaleTo(width: number, height: number): void;
-        /**
-         * Gets the context of the canvas used by the texture
-         * @returns the canvas context of the dynamic texture
-         */
-        getContext(): CanvasRenderingContext2D;
-        /**
-         * Clears the texture
-         */
-        clear(): void;
-        /**
-         * Updates the texture
-         * @param invertY defines the direction for the Y axis (default is true - y increases downwards)
-         * @param premulAlpha defines if alpha is stored as premultiplied (default is false)
-         */
-        update(invertY?: boolean, premulAlpha?: boolean): void;
-        /**
-         * Draws text onto the texture
-         * @param text defines the text to be drawn
-         * @param x defines the placement of the text from the left
-         * @param y defines the placement of the text from the top when invertY is true and from the bottom when false
-         * @param font defines the font to be used with font-style, font-size, font-name
-         * @param color defines the color used for the text
-         * @param clearColor defines the color for the canvas, use null to not overwrite canvas
-         * @param invertY defines the direction for the Y axis (default is true - y increases downwards)
-         * @param update defines whether texture is immediately update (default is true)
-         */
-        drawText(text: string, x: number, y: number, font: string, color: string, clearColor: string, invertY?: boolean, update?: boolean): void;
-        /**
-         * Clones the texture
-         * @returns the clone of the texture.
-         */
-        clone(): DynamicTexture;
-        /**
-         * Serializes the dynamic texture.  The scene should be ready before the dynamic texture is serialized
-         * @returns a serialized dynamic texture object
-         */
-        serialize(): any;
-        /** @hidden */
-        _rebuild(): void;
-    }
-}
-declare module BABYLON {
     /** @hidden */
     export var imageProcessingPixelShader: {
         name: string;
@@ -41021,6 +41038,10 @@ declare module BABYLON {
          * If the gaze trackers color should be updated when selecting meshes
          */
         updateGazeTrackerColor: boolean;
+        /**
+         * If the controller laser color should be updated when selecting meshes
+         */
+        updateControllerLaserColor: boolean;
         /**
          * The gaze tracking mesh corresponding to the left controller
          */
@@ -44213,7 +44234,11 @@ declare module BABYLON {
          */
         createCubeTexture(rootUrl: string, scene: Nullable<Scene>, files: Nullable<string[]>, noMipmap?: boolean, onLoad?: Nullable<(data?: any) => void>, onError?: Nullable<(message?: string, exception?: any) => void>, format?: number, forcedExtension?: any, createPolynomials?: boolean, lodScale?: number, lodOffset?: number, fallback?: Nullable<InternalTexture>): InternalTexture;
         private _getSamplingFilter;
-        createRenderTargetTexture(size: any, options: boolean | RenderTargetCreationOptions): InternalTexture;
+        private static _GetNativeTextureFormat;
+        createRenderTargetTexture(size: number | {
+            width: number;
+            height: number;
+        }, options: boolean | RenderTargetCreationOptions): InternalTexture;
         updateTextureSamplingMode(samplingMode: number, texture: InternalTexture): void;
         bindFramebuffer(texture: InternalTexture, faceIndex?: number, requiredWidth?: number, requiredHeight?: number, forceFullscreenViewport?: boolean): void;
         unBindFramebuffer(texture: InternalTexture, disableGenerateMipMaps?: boolean, onBeforeUnbind?: () => void): void;
@@ -45839,6 +45864,10 @@ declare module BABYLON {
          */
         protected _mesh: Mesh;
         /**
+         * Gets the mesh used for the skybox.
+         */
+        readonly mesh: Mesh;
+        /**
          * The current fov(field of view) multiplier, 0.0 - 2.0. Defaults to 1.0. Lower values "zoom in" and higher values "zoom out".
          * Also see the options.resolution property.
          */
@@ -45876,14 +45905,21 @@ declare module BABYLON {
 }
 declare module BABYLON {
     /**
+     * Class used to host RGBD texture specific utilities
+     */
+    export class RGBDTextureTools {
+        /**
+         * Expand the RGBD Texture from RGBD to Half Float if possible.
+         * @param texture the texture to expand.
+         */
+        static ExpandRGBDTexture(texture: Texture): void;
+    }
+}
+declare module BABYLON {
+    /**
      * Class used to host texture specific utilities
      */
     export class BRDFTextureTools {
-        /**
-         * Expand the BRDF Texture from RGBD to Half Float if necessary.
-         * @param texture the texture to expand.
-         */
-        private static _ExpandDefaultBRDFTexture;
         /**
          * Gets a default environment BRDF for MS-BRDF Height Correlated BRDF
          * @param scene defines the hosting scene
@@ -46224,6 +46260,7 @@ declare module BABYLON {
         BRDF_V_HEIGHT_CORRELATED: boolean;
         MS_BRDF_ENERGY_CONSERVATION: boolean;
         SPHERICAL_HARMONICS: boolean;
+        SPECULAR_GLOSSINESS_ENERGY_CONSERVATION: boolean;
         /** @hidden */
         _areMiscDirty: boolean;
     }
@@ -46247,6 +46284,12 @@ declare module BABYLON {
          * less GPU intensive at the drawback of a lower quality.
          */
         static DEFAULT_USE_SPHERICAL_HARMONICS: boolean;
+        /**
+         * Default value used for activating energy conservation for the specular workflow.
+         * If activated, the albedo color is multiplied with (1. - maxChannel(specular color)).
+         * If deactivated, a material is only physically plausible, when (albedo color + specular color) < 1.
+         */
+        static DEFAULT_USE_SPECULAR_GLOSSINESS_INPUT_ENERGY_CONSERVATION: boolean;
         private _useEnergyConservation;
         /**
          * Defines if the material uses energy conservation.
@@ -46271,6 +46314,14 @@ declare module BABYLON {
          * to the ground truth.
          */
         useSphericalHarmonics: boolean;
+        private _useSpecularGlossinessInputEnergyConservation;
+        /**
+         * Defines if the material uses energy conservation, when the specular workflow is active.
+         * If activated, the albedo color is multiplied with (1. - maxChannel(specular color)).
+         * If deactivated, a material is only physically plausible, when (albedo color + specular color) < 1.
+         * In the deactivated case, the material author has to ensure energy conservation, for a physically plausible rendering.
+         */
+        useSpecularGlossinessInputEnergyConservation: boolean;
         /** @hidden */
         private _internalMarkAllSubMeshesAsMiscDirty;
         /** @hidden */
@@ -46856,6 +46907,7 @@ declare module BABYLON {
         LIGHTMAPDIRECTUV: number;
         USELIGHTMAPASSHADOWMAP: boolean;
         GAMMALIGHTMAP: boolean;
+        RGBDLIGHTMAP: boolean;
         REFLECTION: boolean;
         REFLECTIONMAP_3D: boolean;
         REFLECTIONMAP_SPHERICAL: boolean;
@@ -46933,6 +46985,7 @@ declare module BABYLON {
         ANISOTROPIC_TEXTUREDIRECTUV: number;
         BRDF_V_HEIGHT_CORRELATED: boolean;
         MS_BRDF_ENERGY_CONSERVATION: boolean;
+        SPECULAR_GLOSSINESS_ENERGY_CONSERVATION: boolean;
         SHEEN: boolean;
         SHEEN_TEXTURE: boolean;
         SHEEN_TEXTUREDIRECTUV: number;
@@ -52082,9 +52135,9 @@ declare module BABYLON {
 }
 declare module BABYLON {
     /**
-     * Enum used to define well known values e.g. values automatically provided by the system
+     * Enum used to define system values e.g. values automatically provided by the system
      */
-    export enum NodeMaterialWellKnownValues {
+    export enum NodeMaterialSystemValues {
         /** World */
         World = 1,
         /** View */
@@ -52227,6 +52280,8 @@ declare module BABYLON {
         SAMPLER3DGREENDEPTH: boolean;
         SAMPLER3DBGRMAP: boolean;
         IMAGEPROCESSINGPOSTPROCESS: boolean;
+        /** MISC. */
+        BUMPDIRECTUV: number;
         constructor();
         setValue(name: string, value: boolean): void;
     }
@@ -52512,7 +52567,7 @@ declare module BABYLON {
         /**
          * Gets or sets the texture associated with the node
          */
-        texture: Nullable<BaseTexture>;
+        texture: Nullable<Texture>;
         /**
          * Create a new TextureBlock
          * @param name defines the block name
@@ -52635,6 +52690,8 @@ declare module BABYLON {
         emitComments: boolean;
         /** Emit build activity */
         verbose: boolean;
+        /** Gets or sets the hosting scene */
+        scene: Scene;
         /**
          * Gets the compilation hints emitted at compilation time
          */
@@ -52690,6 +52747,12 @@ declare module BABYLON {
             [key: string]: string;
         };
         /**
+         * Gets the list of emitted extensions
+         */
+        extensions: {
+            [key: string]: string;
+        };
+        /**
          * Gets the target of the compilation state
          */
         target: NodeMaterialBlockTargets;
@@ -52735,6 +52798,8 @@ declare module BABYLON {
         _excludeVariableName(name: string): void;
         /** @hidden */
         _getGLType(type: NodeMaterialBlockConnectionPointTypes): string;
+        /** @hidden */
+        _emitExtension(name: string, extension: string): void;
         /** @hidden */
         _emitFunction(name: string, code: string, comments: string): void;
         /** @hidden */
@@ -52914,6 +52979,14 @@ declare module BABYLON {
          */
         provideFallbacks(mesh: AbstractMesh, fallbacks: EffectFallbacks): void;
         /**
+         * Initialize defines for shader compilation
+         * @param mesh defines the mesh to be rendered
+         * @param nodeMaterial defines the node material requesting the update
+         * @param defines defines the material defines to update
+         * @param useInstances specifies that instances should be used
+         */
+        initializeDefines(mesh: AbstractMesh, nodeMaterial: NodeMaterial, defines: NodeMaterialDefines, useInstances?: boolean): void;
+        /**
          * Update defines for shader compilation
          * @param mesh defines the mesh to be rendered
          * @param nodeMaterial defines the node material requesting the update
@@ -52921,14 +52994,6 @@ declare module BABYLON {
          * @param useInstances specifies that instances should be used
          */
         prepareDefines(mesh: AbstractMesh, nodeMaterial: NodeMaterial, defines: NodeMaterialDefines, useInstances?: boolean): void;
-        /**
-         * Initialize defines for shader compilation
-         * @param mesh defines the mesh to be rendered
-         * @param nodeMaterial defines the node material requesting the update
-         * @param defines defines the material defines to be prepared
-         * @param useInstances specifies that instances should be used
-         */
-        initializeDefines(mesh: AbstractMesh, nodeMaterial: NodeMaterial, defines: NodeMaterialDefines, useInstances?: boolean): void;
         /**
          * Lets the block try to connect some inputs automatically
          * @param material defines the hosting NodeMaterial
@@ -53018,8 +53083,14 @@ declare module BABYLON {
         private _valueCallback;
         private _type;
         private _animationType;
+        /** Gets or set a value used to limit the range of float values */
+        min: number;
+        /** Gets or set a value used to limit the range of float values */
+        max: number;
+        /** Gets or sets a value used by the Node Material editor to determine how to configure the current value if it is a matrix */
+        matrixMode: number;
         /** @hidden */
-        _wellKnownValue: Nullable<NodeMaterialWellKnownValues>;
+        _systemValue: Nullable<NodeMaterialSystemValues>;
         /** Gets or sets a boolean indicating that this input can be edited in the Inspector (false by default) */
         visibleInInspector: boolean;
         /**
@@ -53044,11 +53115,11 @@ declare module BABYLON {
          */
         setAsAttribute(attributeName?: string): InputBlock;
         /**
-         * Set the source of this connection point to a well known value
-         * @param value define the well known value to use (world, view, etc...) or null to switch to manual value
+         * Set the source of this connection point to a system value
+         * @param value define the system value to use (world, view, etc...) or null to switch to manual value
          * @returns the current connection point
          */
-        setAsWellKnownValue(value: Nullable<NodeMaterialWellKnownValues>): InputBlock;
+        setAsSystemValue(value: Nullable<NodeMaterialSystemValues>): InputBlock;
         /**
          * Gets or sets the value of that point.
          * Please note that this value will be ignored if valueCallback is defined
@@ -53087,13 +53158,13 @@ declare module BABYLON {
          */
         isVarying: boolean;
         /**
-         * Gets a boolean indicating that the current connection point is a well known value
+         * Gets a boolean indicating that the current connection point is a system value
          */
-        readonly isWellKnownValue: boolean;
+        readonly isSystemValue: boolean;
         /**
-         * Gets or sets the current well known value or null if not defined as well know value
+         * Gets or sets the current well known value or null if not defined as a system value
          */
-        wellKnownValue: Nullable<NodeMaterialWellKnownValues>;
+        systemValue: Nullable<NodeMaterialSystemValues>;
         /**
          * Gets the current class name
          * @returns the class name
@@ -53105,6 +53176,7 @@ declare module BABYLON {
          */
         animate(scene: Scene): void;
         private _emitDefine;
+        initialize(state: NodeMaterialBuildState): void;
         /**
          * Set the input block to its default value (based on its type)
          */
@@ -53383,8 +53455,8 @@ declare module BABYLON {
      * Block used to get data information from a light
      */
     export class LightInformationBlock extends NodeMaterialBlock {
-        private _lightDataDefineName;
-        private _lightColorDefineName;
+        private _lightDataUniformName;
+        private _lightColorUniformName;
         /**
          * Gets or sets the light associated with this block
          */
@@ -53411,6 +53483,10 @@ declare module BABYLON {
          * Gets the direction output component
          */
         readonly color: NodeMaterialConnectionPoint;
+        /**
+     * Gets the direction output component
+     */
+        readonly intensity: NodeMaterialConnectionPoint;
         bind(effect: Effect, nodeMaterial: NodeMaterial, mesh?: Mesh): void;
         protected _buildBlock(state: NodeMaterialBuildState): this;
         serialize(): any;
@@ -53482,6 +53558,59 @@ declare module BABYLON {
         prepareDefines(mesh: AbstractMesh, nodeMaterial: NodeMaterial, defines: NodeMaterialDefines): void;
         bind(effect: Effect, nodeMaterial: NodeMaterial, mesh?: Mesh): void;
         protected _buildBlock(state: NodeMaterialBuildState): this;
+    }
+}
+declare module BABYLON {
+    /**
+     * Block used to pertub normals based on a normal map
+     */
+    export class PerturbNormalBlock extends NodeMaterialBlock {
+        private _tangentSpaceParameterName;
+        /** Gets or sets a boolean indicating that normal should be inverted on X axis */
+        invertX: boolean;
+        /** Gets or sets a boolean indicating that normal should be inverted on Y axis */
+        invertY: boolean;
+        /**
+         * Create a new PerturbNormalBlock
+         * @param name defines the block name
+         */
+        constructor(name: string);
+        /**
+         * Gets the current class name
+         * @returns the class name
+         */
+        getClassName(): string;
+        /**
+         * Gets the world position input component
+         */
+        readonly worldPosition: NodeMaterialConnectionPoint;
+        /**
+         * Gets the world normal input component
+         */
+        readonly worldNormal: NodeMaterialConnectionPoint;
+        /**
+         * Gets the uv input component
+         */
+        readonly uv: NodeMaterialConnectionPoint;
+        /**
+        * Gets the normal map color input component
+        */
+        readonly normalMapColor: NodeMaterialConnectionPoint;
+        /**
+        * Gets the strength input component
+        */
+        readonly strength: NodeMaterialConnectionPoint;
+        /**
+         * Gets the output component
+         */
+        readonly output: NodeMaterialConnectionPoint;
+        prepareDefines(mesh: AbstractMesh, nodeMaterial: NodeMaterial, defines: NodeMaterialDefines): void;
+        bind(effect: Effect, nodeMaterial: NodeMaterial, mesh?: Mesh): void;
+        autoConfigure(material: NodeMaterial): void;
+        protected _buildBlock(state: NodeMaterialBuildState): this;
+        protected _dumpPropertiesCode(): string;
+        serialize(): any;
+        _deserialize(serializationObject: any, scene: Scene, rootUrl: string): void;
     }
 }
 declare module BABYLON {
@@ -53788,6 +53917,22 @@ declare module BABYLON {
          */
         readonly input: NodeMaterialConnectionPoint;
         /**
+         * Gets the source min input component
+         */
+        readonly sourceMin: NodeMaterialConnectionPoint;
+        /**
+         * Gets the source max input component
+         */
+        readonly sourceMax: NodeMaterialConnectionPoint;
+        /**
+         * Gets the target min input component
+         */
+        readonly targetMin: NodeMaterialConnectionPoint;
+        /**
+         * Gets the target max input component
+         */
+        readonly targetMax: NodeMaterialConnectionPoint;
+        /**
          * Gets the output component
          */
         readonly output: NodeMaterialConnectionPoint;
@@ -53843,7 +53988,9 @@ declare module BABYLON {
         /** Floor */
         Floor = 6,
         /** Ceiling */
-        Ceiling = 7
+        Ceiling = 7,
+        /** Square root */
+        Sqrt = 8
     }
     /**
      * Block used to apply trigonometry operation to floats
@@ -53872,6 +54019,8 @@ declare module BABYLON {
          */
         readonly output: NodeMaterialConnectionPoint;
         protected _buildBlock(state: NodeMaterialBuildState): this;
+        serialize(): any;
+        _deserialize(serializationObject: any, scene: Scene, rootUrl: string): void;
     }
 }
 declare module BABYLON {
@@ -54192,11 +54341,11 @@ declare module BABYLON {
 }
 declare module BABYLON {
     /**
-     * Block used to get the opposite of a value
+     * Block used to get the opposite (1 - x) of a value
      */
-    export class OppositeBlock extends NodeMaterialBlock {
+    export class OneMinusBlock extends NodeMaterialBlock {
         /**
-         * Creates a new OppositeBlock
+         * Creates a new OneMinusBlock
          * @param name defines the block name
          */
         constructor(name: string);
@@ -54348,6 +54497,118 @@ declare module BABYLON {
 }
 declare module BABYLON {
     /**
+     * Block used to get the distance between 2 values
+     */
+    export class DistanceBlock extends NodeMaterialBlock {
+        /**
+         * Creates a new DistanceBlock
+         * @param name defines the block name
+         */
+        constructor(name: string);
+        /**
+         * Gets the current class name
+         * @returns the class name
+         */
+        getClassName(): string;
+        /**
+         * Gets the left operand input component
+         */
+        readonly left: NodeMaterialConnectionPoint;
+        /**
+         * Gets the right operand input component
+         */
+        readonly right: NodeMaterialConnectionPoint;
+        /**
+         * Gets the output component
+         */
+        readonly output: NodeMaterialConnectionPoint;
+        protected _buildBlock(state: NodeMaterialBuildState): this;
+    }
+}
+declare module BABYLON {
+    /**
+     * Block used to get the length of a vector
+     */
+    export class LengthBlock extends NodeMaterialBlock {
+        /**
+         * Creates a new LengthBlock
+         * @param name defines the block name
+         */
+        constructor(name: string);
+        /**
+         * Gets the current class name
+         * @returns the class name
+         */
+        getClassName(): string;
+        /**
+         * Gets the value input component
+         */
+        readonly value: NodeMaterialConnectionPoint;
+        /**
+         * Gets the output component
+         */
+        readonly output: NodeMaterialConnectionPoint;
+        protected _buildBlock(state: NodeMaterialBuildState): this;
+    }
+}
+declare module BABYLON {
+    /**
+     * Block used to get negative version of a value (i.e. x * -1)
+     */
+    export class NegateBlock extends NodeMaterialBlock {
+        /**
+         * Creates a new NegateBlock
+         * @param name defines the block name
+         */
+        constructor(name: string);
+        /**
+         * Gets the current class name
+         * @returns the class name
+         */
+        getClassName(): string;
+        /**
+         * Gets the value input component
+         */
+        readonly value: NodeMaterialConnectionPoint;
+        /**
+         * Gets the output component
+         */
+        readonly output: NodeMaterialConnectionPoint;
+        protected _buildBlock(state: NodeMaterialBuildState): this;
+    }
+}
+declare module BABYLON {
+    /**
+     * Block used to get the value of the first parameter raised to the power of the second
+     */
+    export class PowBlock extends NodeMaterialBlock {
+        /**
+         * Creates a new PowBlock
+         * @param name defines the block name
+         */
+        constructor(name: string);
+        /**
+         * Gets the current class name
+         * @returns the class name
+         */
+        getClassName(): string;
+        /**
+         * Gets the value operand input component
+         */
+        readonly value: NodeMaterialConnectionPoint;
+        /**
+         * Gets the power operand input component
+         */
+        readonly power: NodeMaterialConnectionPoint;
+        /**
+         * Gets the output component
+         */
+        readonly output: NodeMaterialConnectionPoint;
+        protected _buildBlock(state: NodeMaterialBuildState): this;
+    }
+}
+declare module BABYLON {
+    /**
      * Effect Render Options
      */
     export interface IEffectRendererOptions {
@@ -54383,6 +54644,11 @@ declare module BABYLON {
          * @param viewport Defines the viewport to set (defaults to 0 0 1 1)
          */
         setViewport(viewport?: Viewport): void;
+        /**
+         * Binds the embedded attributes buffer to the effect.
+         * @param effect Defines the effect to bind the attributes for
+         */
+        bindBuffers(effect: Effect): void;
         /**
          * Sets the current effect wrapper to use during draw.
          * The effect needs to be ready before calling this api.
@@ -56135,6 +56401,18 @@ declare module BABYLON {
          */
         createCrowd(maxAgents: number, maxAgentRadius: number, scene: Scene): ICrowd;
         /**
+         * Set the Bounding box extent for doing spatial queries (getClosestPoint, getRandomPointAround, ...)
+         * The queries will try to find a solution within those bounds
+         * default is (1,1,1)
+         * @param extent x,y,z value that define the extent around the queries point of reference
+         */
+        setDefaultQueryExtent(extent: Vector3): void;
+        /**
+         * Get the Bounding box extent specified by setDefaultQueryExtent
+         * @returns the box extent values
+         */
+        getDefaultQueryExtent(): Vector3;
+        /**
          * Release all resources
          */
         dispose(): void;
@@ -56185,6 +56463,18 @@ declare module BABYLON {
          * @param destination targeted world position
          */
         agentGoto(index: number, destination: Vector3): void;
+        /**
+         * Set the Bounding box extent for doing spatial queries (getClosestPoint, getRandomPointAround, ...)
+         * The queries will try to find a solution within those bounds
+         * default is (1,1,1)
+         * @param extent x,y,z value that define the extent around the queries point of reference
+         */
+        setDefaultQueryExtent(extent: Vector3): void;
+        /**
+         * Get the Bounding box extent specified by setDefaultQueryExtent
+         * @returns the box extent values
+         */
+        getDefaultQueryExtent(): Vector3;
         /**
          * Release all resources
          */
@@ -56358,6 +56648,18 @@ declare module BABYLON {
          */
         createCrowd(maxAgents: number, maxAgentRadius: number, scene: Scene): ICrowd;
         /**
+         * Set the Bounding box extent for doing spatial queries (getClosestPoint, getRandomPointAround, ...)
+         * The queries will try to find a solution within those bounds
+         * default is (1,1,1)
+         * @param extent x,y,z value that define the extent around the queries point of reference
+         */
+        setDefaultQueryExtent(extent: Vector3): void;
+        /**
+         * Get the Bounding box extent specified by setDefaultQueryExtent
+         * @returns the box extent values
+         */
+        getDefaultQueryExtent(): Vector3;
+        /**
          * Disposes
          */
         dispose(): void;
@@ -56446,6 +56748,18 @@ declare module BABYLON {
          * @param deltaTime in seconds
          */
         update(deltaTime: number): void;
+        /**
+         * Set the Bounding box extent for doing spatial queries (getClosestPoint, getRandomPointAround, ...)
+         * The queries will try to find a solution within those bounds
+         * default is (1,1,1)
+         * @param extent x,y,z value that define the extent around the queries point of reference
+         */
+        setDefaultQueryExtent(extent: Vector3): void;
+        /**
+         * Get the Bounding box extent specified by setDefaultQueryExtent
+         * @returns the box extent values
+         */
+        getDefaultQueryExtent(): Vector3;
         /**
          * Release all resources
          */
@@ -62616,6 +62930,18 @@ interface XRInputSourceChangeEvent {
     removed: Array<XRInputSource>;
     added: Array<XRInputSource>;
 }
+
+/**
+ * @ignore
+ */
+declare module BABYLON.GLTF2.Exporter {
+}
+
+/**
+ * @ignore
+ */
+declare module BABYLON.GLTF1 {
+}
 declare module BABYLON.GUI {
     /**
      * Class used to specific a value and its associated unit
@@ -64058,6 +64384,10 @@ declare module BABYLON.GUI {
          */
         onImageLoadedObservable: BABYLON.Observable<Image>;
         /**
+         * BABYLON.Observable notified when _sourceLeft, _sourceTop, _sourceWidth and _sourceHeight are computed
+         */
+        onSVGAttributesComputedObservable: BABYLON.Observable<Image>;
+        /**
          * Gets a boolean indicating that the content is loaded
          */
         readonly isLoaded: boolean;
@@ -64119,6 +64449,15 @@ declare module BABYLON.GUI {
          * Gets or sets image source url
          */
         source: BABYLON.Nullable<string>;
+        /**
+         * Checks for svg document with icon id present
+         */
+        private _svgCheck;
+        /**
+         * Sets sourceLeft, sourceTop, sourceWidth, sourceHeight automatically
+         * given external svg file and icon id
+         */
+        private _getSVGAttribs;
         /**
          * Gets or sets the cell width to use when animation sheet is enabled
          * @see http://doc.babylonjs.com/how_to/gui#image
@@ -69388,17 +69727,11 @@ declare module BABYLON {
         static CreateSTL(meshes: Mesh[], download?: boolean, fileName?: string, binary?: boolean, isLittleEndian?: boolean): any;
     }
 }
-/**
- * @ignoreChildren
- * @ignore
- */
 declare module "babylonjs-gltf2interface" {
     export = BABYLON.GLTF2;
 }
 /**
  * Module for glTF 2.0 Interface
- * @ignoreChildren
- * @ignore
  */
 declare module BABYLON.GLTF2 {
     /**
@@ -70247,6 +70580,7 @@ declare module BABYLON.GLTF2 {
 
     /**
      * The glTF validation results
+     * @ignore
      */
     interface IGLTFValidationResults {
         info: {
@@ -70278,16 +70612,23 @@ declare module BABYLON.GLTF2 {
      * The glTF validation options
      */
     interface IGLTFValidationOptions {
+        /** Uri to use */
         uri?: string;
+        /** Function used to load external resources */
         externalResourceFunction?: (uri: string) => Promise<Uint8Array>;
+        /** Boolean indicating that we need to validate accessor data */
         validateAccessorData?: boolean;
+        /** max number of issues allowed */
         maxIssues?: number;
+        /** Ignored issues */
         ignoredIssues?: Array<string>;
+        /** Value to override severy settings */
         severityOverrides?: Object;
     }
 
     /**
      * The glTF validator object
+     * @ignore
      */
     interface IGLTFValidator {
         validateBytes: (data: Uint8Array, options?: IGLTFValidationOptions) => Promise<IGLTFValidationResults>;

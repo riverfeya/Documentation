@@ -2,15 +2,15 @@
 
 ![Toon material](/img/extensions/materials/toon.png)
 
-## Using the cell material
+## Использование материала клетки
 
-Cell material can be found here: [https://github.com/BabylonJS/Babylon.js/blob/master/dist/preview release/materialsLibrary/babylon.cellMaterial.js](https://github.com/BabylonJS/Babylon.js/blob/master/dist/preview release/materialsLibrary/babylon.cellMaterial.js)
+Cell материал можно найти здесь: [https://github.com/BabylonJS/Babylon.js/blob/master/dist/preview release/materialsLibrary/babylon.cellMaterial.js](https://github.com/BabylonJS/Babylon.js/blob/master/dist/preview release/materialsLibrary/babylon.cellMaterial.js)
 
-A demo can be found here:  https://www.babylonjs-playground.com/#36VUUE
+Демо можно найти здесь:  https://www.babylonjs-playground.com/#36VUUE
 
-## Creating and customizing the cell material
+## Создание и настройка материала ячейки
 
-You can customize special properties of the material:
+Вы можете настроить специальные свойства материала:
 
 ```
 // Create a new cell material
