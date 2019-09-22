@@ -4,56 +4,55 @@ PG_TITLE: 15. Environment
 ---
 # Environment
 
-You have come a long way, have learned about shapes, lights, sprites, particles, materials. But there is something missing in your scenes: a proper environment. This is the first of three consecutive How_To that talk about scene environment factors and effects. We will start off with simple scene `clearColor` (background color), then talk briefly about scene `ambientColor`, then on to 6-texture skyboxes, and then fog to give an illusion of depth to your scenes.
+Вы прошли долгий путь, узнали о формах, огнях, спрайтах, частицах, материалах. Но в ваших сценах чего-то не хватает: подходящая среда. Это первый из трех последовательных How_To, которые говорят о факторах и эффектах окружения сцены. Мы начнем с простой сцены `clearColor` (background color), затем кратко поговорим о scene `ambientColor`, затем на 6-texture skyboxes, а затем туман, чтобы создать иллюзию глубины ваших сцен.
 
 ![Environment](/img/how_to/13.jpg)
 
 _A picture showing Babylon.js fog in action_
 
-## How can I do this?
+## Как я могу это сделать?
 
-We will talk about that nice fog effect, shortly. First, I want to introduce you to two interesting properties on the [scene class object](/classes/3.0/Scene):
+Мы поговорим об этом приятном эффекте тумана, в ближайшее время. Во-первых, я хочу познакомить вас с двумя интересными [scene class object](/classes/3.0/Scene):
 
-* `scene.clearColor` - changes the 'background' color.
-* `scene.ambientColor` - changes the color used in several effects, including ambient lighting.
+* `scene.clearColor` - изменяет 'background' color.
+* `scene.ambientColor` - изменяет цвет используется в нескольких эффектах, включая окружающее освещение.
 
-Both of them are very useful, and powerful in their own right.
+Оба они очень полезны и мощны сами по себе.
 
-### Changing the Background color (`scene.clearColor`)
+### Изменение Background color (`scene.clearColor`)
 
-The 'clearColor' property on the scene object is the most rudimentary of environment properties/adjustments. Simply stated, this is how you change the background color of the scene. Here is how it is done:
+Свойство 'clearColor' на сцене объект является самым элементарным из environment properties/adjustments. Проще говоря, это то, как вы меняете цвет фона сцены. Вот как это делается:
 
 ```javascript
 scene.clearColor = new BABYLON.Color3(0.5, 0.8, 0.5);
 ```
-Or maybe you want to use one of our preset colors and avoid using the `new` keyword:
+Или, может быть, вы хотите использовать один из наших предустановленных цветов и избегать использования ключевое слово `new` :
 ```javascript
 scene.clearColor = BABYLON.Color3.Blue();
 ```
-This color and property is not used in any calculations for the final colors of mesh, materials, textures, or anything else. It is simply the background color of the scene. Easy.
+Этот цвет и свойство не используются ни в каких расчетах для окончательных цветов mesh, materials, textures, или что-нибудь еще. Это просто цвет фона сцены.
 
-### Changing the Ambient color (`scene.ambientColor`)
+### Изменение Ambient color (`scene.ambientColor`)
 
-Conversely, the `ambientColor` property on the scene object is a very powerful and influential environment property/adjustment. First, let's have a look at its syntax:
+Напротив, свойство `ambientColor` на сцене объект очень мощный и влиятельный environment property/adjustment. Во-первых, давайте посмотрим на его синтаксис:
 
 ```javascript
 scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
 ```
-As you can see, it is set using the same format as `clearColor`, but `ambientColor` is used in quite a few calculations toward determining the final colors of scene items.&nbsp; Mainly, it is used in conjunction with a mesh's `StandardMaterial.ambientColor` to determine a FINAL `ambientColor` for the mesh material. 
+Как видите, он установлен в том же формате, что и `clearColor`, но `ambientColor` используется в нескольких расчетах для определения окончательных цветов элементов сцены.&nbsp; В основном, он используется в сочетании с `StandardMaterial.ambientColor` мешей для определения FINAL `ambientColor` материала меша. 
 
-You will find that when there is no `scene.ambientColor`, then `StandardMaterial.ambientColor` and `StandardMaterial.ambientTexture` will appear to do nothing.&nbsp; Set a `scene.ambientColor` of some value, like the example above, and `StandardMaterial.ambientColor`/`StandardMaterial.ambientTexture` will become active on meshes where you have applied such.
+Вы увидите что когда нет `scene.ambientColor`, тогда `StandardMaterial.ambientColor` и `StandardMaterial.ambientTexture` появляются ничего не делая.&nbsp; Задайте некоторое значение `scene.ambientColor` , как в примере выше, и `StandardMaterial.ambientColor`/`StandardMaterial.ambientTexture` станет активным на сетках, где вы применили такие.
 
-By default, `scene.ambientColor` is set to `Color3(0, 0, 0)`, which means there is no `scene.ambientColor`.
+По умолчанию , `scene.ambientColor` установлен в `Color3(0, 0, 0)`, что означает, что нет `scene.ambientColor`.
 
-(Please see the section on ambientColors in our [Unleash the Standard Material](https://www.eternalcoding.com/?p=303) tutorial, for more information.)
+(Пожалуйста, смотрите раздел по ambientColors в нашем [Unleash the Standard Material](https://www.eternalcoding.com/?p=303) tutorial, for more information.)
 
 ### Skybox
 
-To give a perfect illusion of a beautiful sunny sky, we are going to create a simple box, but with a special texture.
-There is two ways to create a skybox. Let's start with the manual one to understand how things work under the hood and then we will be able to use the automatic one.
+Чтобы создать идеальную иллюзию прекрасного солнечного неба, мы собираемся создать простую коробку, но со специальной текстурой. Существует два способа создания скайбокса. Давайте начнем с руководства, чтобы понять, как все работает под капотом, а затем мы сможем использовать автоматический.
 
 #### Manual creation
-First, our box, nothing new, just take notice of the disabled [backface culling](http://en.wikipedia.org/wiki/Back-face_culling):
+Во-первых, наша коробка, ничего нового, просто обратите внимание на отключение [backface culling](http://en.wikipedia.org/wiki/Back-face_culling):
 ```javascript
 var skybox = BABYLON.Mesh.CreateBox("skyBox", 100.0, scene);
 var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
@@ -62,34 +61,34 @@ skyboxMaterial.disableLighting = true;
 skybox.material = skyboxMaterial;
 ```
 
-Next, we set the `infiniteDistance` property. This makes the skybox follow our camera's position.
+Далее мы устанавливаем свойство `infiniteDistance` . Это заставляет скайбокс следовать позиции нашей камеры.
 ```javascript
 skybox.infiniteDistance = true;
 ```
 
-Now we must remove all light reflections on our box (the sun doesn't reflect on the sky!):
+Теперь мы должны удалить все отражения света на нашей коробке (солнце не отражается на небе!):
 ```javascript
 skyboxMaterial.disableLighting = true;
 ```
 
-Next, we apply our special sky texture to it. This texture must have been prepared to be a skybox, in a dedicated directory, named “skybox” in our example:
+Затем мы применяем нашу специальную текстуру неба к нему. Эта текстура должна быть подготовлена ​​для скайбокса, в специальном каталоге с именем «скайбокс» в нашем примере.:
 ```javascript
 skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
 skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
 ```
-(More about reflectionTextures can be found in our [Unleash the Standard Material](https://www.eternalcoding.com/?p=303) tutorial.)
+(Подробнее об отражении текстур можно найти в нашем [Unleash the Standard Material](https://www.eternalcoding.com/?p=303) tutorial.)
 
-In that `/skybox` directory, we must find 6 sky textures, one for each face of our box. Each image must be named per the corresponding face: “skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
+В этой папке `/skybox` , мы должны найти 6 текстур неба, по одной на каждую грань нашего бокса. Каждое изображение должно быть названо в соответствии с face: “skybox_nx.png”, “skybox_ny.png”, “skybox_nz.png”, “skybox_px.png”, “skybox_py.png”, “skybox_pz.png”.
 
-Skybox textures need not be textures of sky alone. You can search the Internet for skyboxes and find buildings, hills, mountains, trees, lakes, planets, stars, you name it (all can be used nicely) as part of skybox textures, but some require a payment.
+Skybox textures не должно быть текстурой одного неба. Вы можете искать в Интернете скайбоксы и находить здания, холмы, горы, деревья, озера, планеты, звезды, вы называете это (все можно красиво использовать) как часть текстур скайбокса, но некоторые требуют оплаты.
 
-You can also use dds files to specify your skybox. These special files can contain all information required to setup a cube texture:
+Вы также можете использовать файлы dds, чтобы указать свой скайбокс. Эти специальные файлы могут содержать всю информацию, необходимую для настройки текстуры куба.:
 
 ```javascript
 skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/assets/textures/SpecularHDR.dds", scene);
 ```
 
-Final note, if you want your skybox to render behind everything else, set the skybox's `renderingGroupId` to `0`, and every other renderable object's `renderingGroupId` greater than zero, for example:
+Последнее замечание: если вы хотите, чтобы ваш скайбокс отображался позади всего остального, задайте для &#39;renderGroupId` скайбокса значение&#39; 0 &#39;, а для любого другого объекта визуализируемого объекта renderGroupId больше нуля, например:
 ```javascript
 skybox.renderingGroupId = 0;
 
@@ -97,10 +96,10 @@ skybox.renderingGroupId = 0;
 myMesh.renderingGroupId = 1;
 ```
 
-More info about rendering groups and rendering order can be found [here](/resources/Transparency_and_How_Meshes_Are_Rendered).
+Более подробную информацию о группах рендеринга и порядке рендеринга можно найти [here](/resources/Transparency_and_How_Meshes_Are_Rendered).
 
 #### Automatic creation
-Now that we understand how a skybox can be created let's move to a simpler way:
+Теперь, когда мы понимаем, как можно создать скайбокс, давайте перейдем к более простому способу.:
 
 ```javascript
 var envTexture = new BABYLON.CubeTexture("/assets/textures/SpecularHDR.dds", scene);
@@ -113,38 +112,38 @@ Check out [scene helpers](/how_to/fast_build) for more information on this and o
 
 ### Fog
 
-Fog is quite an advanced effect, but fog in Babylon.js has been simplified to the maximum. It’s now very easy to add fog to your scenes.&nbsp; First, we define the fog mode like this:
+Туман довольно продвинутый эффект, но туман в Babylon.js был максимально упрощен. Теперь очень легко добавить туман в свои сцены. Сначала мы определяем режим тумана следующим образом:
 
 ```javascript
 scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
 ```
 
-Here are the available modes:
+Вот доступные режимы:
 - `BABYLON.Scene.FOGMODE_NONE` - default one, fog is deactivated.
-- `BABYLON.Scene.FOGMODE_EXP` - the fog density is following an exponential function.
-- `BABYLON.Scene.FOGMODE_EXP2` - same that above but faster.
-- `BABYLON.Scene.FOGMODE_LINEAR` - the fog density is following a linear function.
+- `BABYLON.Scene.FOGMODE_EXP` - плотность тумана следует экспоненциальной функции.
+- `BABYLON.Scene.FOGMODE_EXP2` - то же самое, что выше, но быстрее.
+- `BABYLON.Scene.FOGMODE_LINEAR` - плотность тумана соответствует линейной функции.
 
--> If you choose the `EXP`, or `EXP2` mode, then you can define the density option (default is `0.1`):
+-> Если вы выбираете `EXP`, или `EXP2` режим, тогда вы можете определить опцию density (default is `0.1`):
 ```javascript
 scene.fogDensity = 0.01;
 ```
--> Otherwise, if you choose `LINEAR` mode, then you can define where fog starts and where fog ends:
+-> В противном случае, если вы выберете режим `LINEAR`, вы можете определить, где начинается туман и где он заканчивается.:
 ```javascript
 scene.fogStart = 20.0;
 scene.fogEnd = 60.0;
 ```
 
-Finally, whatever the mode, you can specify the color of the fog (default is `BABYLON.Color3(0.2, 0.2, 0.3)`):
+Наконец, независимо от режима, вы можете указать цвет тумана (default is `BABYLON.Color3(0.2, 0.2, 0.3)`):
 ```javascript
 scene.fogColor = new BABYLON.Color3(0.9, 0.9, 0.85);
 ```
-See, we told you it was easy.
+Видите, мы говорили, что это легко.
 
-If you want to see and play with the playground scene for this tutorial, you can [**click right here**]( https://www.babylonjs-playground.com/?13).
+Если вы хотите увидеть и поиграть с игровой площадкой для этого урока, вы можете [**click right here**]( https://www.babylonjs-playground.com/?13).
 
 ## Next step
-You should have a beautiful scene now, but except from your 3D models, your world is pretty flat, and that’s a shame for your scene. So, in our next environment tutorial, we are going to transform your flat ground into beautiful mountains. To learn this, go [here!](/babylon101/Height_Map)
+Теперь у вас должна быть красивая сцена, но кроме ваших 3D-моделей, ваш мир довольно плоский, и это позор для вашей сцены. Итак, в нашем следующем уроке по окружающей среде мы собираемся превратить вашу плоскую землю в красивые горы. Чтобы узнать это, перейдите на [here!](/babylon101/Height_Map)
 
 # Further Reading
 

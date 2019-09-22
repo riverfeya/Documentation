@@ -4,137 +4,137 @@ PG_TITLE: 17. Shadows
 ---
 ## Introduction
 
-In this tutorial, we are going to learn how to create shadows in Babylon JS. Shadows are now becoming dynamic, and they are now dynamically generated depending upon a light.
-You might want to visit [**the playground scene**]( https://www.babylonjs-playground.com/?15) for this tutorial.
+В этом уроке мы узнаем, как создавать тени в Babylon JS. Тени теперь становятся динамичными, и теперь они генерируются динамически в зависимости от света.
+Вы можете посетить [**the playground scene**]( https://www.babylonjs-playground.com/?15) для этого урока.
 
-## How can I do this?
+## Как я могу это сделать?
 
-Shadows are easy to generate using the babylon.js `ShadowGenerator`. This function uses a shadow map: a map of your scene generated from the light’s point of view.
+Тени легко генерировать, используя babylon.js `ShadowGenerator`. Эта функция использует shadow map: карта вашей сцены, созданная с точки зрения источника света.
 
-The two parameters used by the shadow generator are: the size of the shadow map, and which light is used for the shadow map's computation.
+Генератор теней использует два параметра: размер карты теней и какой свет используется для вычисления карты теней..
 ```javascript
 var shadowGenerator = new BABYLON.ShadowGenerator(1024, light);
 ```
 
-Next, you have to define which shadows will be rendered. Here we want the shadow of our torus, but you can “push” any meshes you want:
+Затем вы должны определить, какие тени будут отображаться. Здесь нам нужна тень нашего тора, но вы можете «протолкнуть» любую сетку, какую захотите:
 ```javascript 
 shadowGenerator.getShadowMap().renderList.push(torus);
 ```
 
-Introduced with babylon.js v3.1, there are two new helper functions to deal with shadow casters:
-* `addShadowCaster(mesh, includeDescendants)`: Helper function to add a mesh and its descendants to the list of shadow casters
-* `removeShadowCaster(mesh, includeDescendants)`: Helper function to remove a mesh and its descendants from the list of shadow casters
+Появившийся с babylon.js v3.1, две новые вспомогательные функции для работы с отбрасыванием теней:
+* `addShadowCaster(mesh, includeDescendants)`: Вспомогательная функция для добавления меша и его потомков в список отбрасывателей теней
+* `removeShadowCaster(mesh, includeDescendants)`: Вспомогательная функция для удаления меша и его потомков из списка отбрасывателей теней
 
-And finally, you will have to define where the shadows will be displayed... by setting a mesh parameter to true:
+И, наконец, вам нужно определить, где будут отображаться тени ... установив для параметра сетки значение true:
 ```javascript
 ground.receiveShadows = true;
 ```
 
 ## Soft shadows
 
-If you want to go further, you can activate shadows filtering in order to create better looking shadows by removing the hard edges.
+Если вы хотите пойти дальше, вы можете активировать фильтрацию теней, чтобы создавать более привлекательные тени, удаляя жесткие края.
 
-There are three filters available:
+Доступны три фильтра:
 
 ### Poisson sampling
 ```javascript
 shadowGenerator.usePoissonSampling = true;
 ```
-If you set this one to _true_, Variance shadow maps will be disabled. This filter uses Poisson sampling to soften shadows. The result is better, but slower.
+Если вы установите этот параметр на _true_, карты теней Variance будут отключены. Этот фильтр использует сэмплирование Пуассона для смягчения теней. Результат лучше, но медленнее.
 
 ### Exponential shadow map 
 ```javascript
 shadowGenerator.useExponentialShadowMap = true;
 ```
-It is _true_ by default, because it is useful to decrease the aliasing of the shadow.  But if you want to reduce computation time, feel free to turn it off.
-You can also control how the exponential shadow map scales depth values by changing the `shadowGenerator.depthScale`. By default, the value is 50.0 but you may want to change it if the depth scale of your world (the distance between MinZ and MaxZ) is small.
+Это _true_ по умолчанию, потому что это полезно, чтобы уменьшить наложение тени. Но если вы хотите сократить время вычислений, не стесняйтесь выключать его.
+Вы также можете управлять тем, как экспоненциальная карта теней масштабирует значения глубины, изменяя `shadowGenerator.depthScale`. По умолчанию это значение равно 50.0, но вы можете изменить его, если шкала глубины вашего мира (расстояние между MinZ и MaxZ) мала.
 
 ### Blur exponential shadow map 
 ```javascript
 shadowGenerator.useBlurExponentialShadowMap = true;
 ```
-This is the better soften shadow filter but the slower as well. It uses blurred exponential shadow map.
+Это лучше смягчает теневой фильтр, но медленнее. Используется размытая экспоненциальная карта теней.
 
-The quality of the blur is defined by the following properties:
+Качество размытия определяется следующими свойствами:
 
-* `shadowGenerator.blurScale`: Define the scale used to downscale the shadow map before applying the blur postprocess. By default, the value is 2
-* `shadowGenerator.blurBoxOffset`: Define the offset of the box's edge used to apply the blur. By default, the value is 1 (Meaning the box will go from -1 to 1 in both directions resulting in 9 values read by the blur postprocess).
-* `shadowGenerator.useKernelBlur`: You can decide to use kernel blur instead of box blur. While a bit more expensive, the quality of the shadow is far better with kernel blur. You can control the kernel size with `shadowGenerator.blurKernel`, which default value is 1.
+* `shadowGenerator.blurScale`: Определите масштаб, используемый для уменьшения масштаба карты теней, перед применением постобработки размытия. По умолчанию значение равно 2
+* `shadowGenerator.blurBoxOffset`: Определите смещение края поля, используемого для применения размытия. По умолчанию это значение равно 1 (это означает, что поле будет изменяться от -1 до 1 в обоих направлениях, что приведет к 9 значениям, прочитанным постобработкой размытия).
+* `shadowGenerator.useKernelBlur`: Вы можете решить использовать размытие ядра вместо размытия окна. В то время как немного дороже, качество тени намного лучше с размытием ядра. Вы можете контролировать размер ядра с помощью `shadowGenerator.blurKernel`, значение по умолчанию которого равно 1.
 
-Here is an example of blurred shadows: https://www.babylonjs-playground.com/#IIZ9UU
+Вот пример размытых теней: https://www.babylonjs-playground.com/#IIZ9UU
 
 ### Close exponential shadow map
-Starting with Babylon.js 3.0, we introduced a new way of doing exponential shadow map to deal with self-shadowing issues: The Close Exponential Shadow Map (CESM).
-With CESM, you can get accurate self-shadowing but you will need to define additional parameters:
-* You must provide the smallest range of depth values from your light by setting `light.shadowMinZ` and `light.shadowMaxZ`. The smaller the range is, the better the shadow will be.
-* You must ensure that the light is as close as possible to the shadow casters.
+Начиная с Babylon.js 3.0, мы представили новый способ создания экспоненциальной карты теней для решения проблем самозатенения:  Close Exponential Shadow Map (CESM).
+С CESM, Вы можете получить точное самозатенение, но вам нужно будет определить дополнительные параметры:
+* Вы должны предоставить наименьший диапазон значений глубины от вашего освещения, установив `light.shadowMinZ` и `light.shadowMaxZ`. Чем меньше диапазон, тем лучше будет тень.
+* Вы должны убедиться, что свет находится как можно ближе к отбрасывателям теней.
 
-You can enable CESM with:
+Вы можете включить CESM так:
 ```javascript
 shadowGenerator.useCloseExponentialShadowMap = true;
 ```
 
-or if you want blurred shadows:
+или если вы хотите размытые тени:
 ```javascript
 shadowGenerator.useBlurCloseExponentialShadowMap = true;
 ```
 
-Here is an example of how CESM works: https://www.babylonjs-playground.com/#0TG0TB
+Вот пример того, как CESM работает: https://www.babylonjs-playground.com/#0TG0TB
 
 ### Percentage Closer Filtering (Webgl2 only)
-Starting with Babylon.js 3.2, a new way of dealing with shadow maps was introduced. This greatly improves the performance and setup of shadows.
+Начиная с Babylon.js 3.2, был представлен новый способ работы с картами теней. Это значительно улучшает производительность и настройку теней.
 
-PCF shadows benefit from the new hardware filtering functions available in Webgl2 and produce a smoother version of Poisson sampling. They fallback to the standard Poisson Sampling when Webgl2 is not available on the target device.
+Тени PCF извлекают выгоду из новых функций аппаратной фильтрации, доступных в Webgl2, и обеспечивают более плавную версию сэмплирования Пуассона. Они отступают от стандартной выборки Пуассона, когда Webgl2 недоступен на целевом устройстве.
 
-You can enable PCF with:
+Вы можете включить PCF так:
 ```javascript
 shadowGenerator.usePercentageCloserFiltering = true;
 ```
 
-Here is an example of how PCF works: https://playground.babylonjs.com/#B48X7G#1
+Вот пример того, как работает PCF: https://playground.babylonjs.com/#B48X7G#1
 
-As PCF requires more resources than can be available on small platforms, you can use the ```filteringQuality``` property to choose the best tradeoff between quality and performance depending on your experience (the lower the quality the better the performance).
+Поскольку PCF требует больше ресурсов, чем может быть доступно на небольших платформах, вы можете использовать свойство  `filteringQuality`, чтобы выбрать лучший компромисс между качеством и производительностью в зависимости от вашего опыта (чем ниже качество, тем выше производительность).
 
 ```javascript
 shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
 ```
 
-Only Point and Directional lights are currently supported by PCF.
+Только точечные и направленные источники света в настоящее время поддерживаются PCF.
 
 ### Contact hardening shadow (Webgl2 only)
-Starting with Babylon.js 3.2, contact hardening shadows based on PCSS shadows was introduced.
+Начиная с Babylon.js 3.2, были представлены тени с упрочнением контактов на основе теней PCSS..
 
-PCSS could be seen as an improved version of PCF but despite looking better they are also more processor expensive and should be reserved for desktop applications. Like PCF, they will automatically fallback to Poisson Sampling if the code is running on a WebGL 1 platform.
+PCSS можно рассматривать как улучшенную версию PCF, но, несмотря на то, что они выглядят лучше, они также требовательнее к процессору и должны использоваться для настольных приложений. Как и PCF, они автоматически переключаются на выборку Пуассона, если код работает на платформе WebGL 1.
 
-In PCSS, the shadows will get softer when they are further away from the object casting them, simulating what happens in real life.
+В PCSS тени станут мягче, когда они будут дальше от объекта, который их отбрасывает, имитируя то, что происходит в реальной жизни.
 
-In order to get accurate result you will need to define additional parameters:
-* You must provide the smallest range of depth values from your light by setting `light.shadowMinZ` and `light.shadowMaxZ`. The smaller the range is, the better the shadow will be.
-* You can also play with the following parameter ```contactHardeningLightSizeUVRatio``` in order to change how fast the shadow softens (between 0 and 1).
+Чтобы получить точный результат, вам необходимо определить дополнительные параметры:
+* Вы должны предоставить наименьший диапазон значений глубины от вашего освещения, установив `light.shadowMinZ` и `light.shadowMaxZ`. Чем меньше диапазон, тем лучше будет тень.
+* Вы также можете играть со следующим параметром ```contactHardeningLightSizeUVRatio``` чтобы изменить скорость размягчения тени (от 0 до 1).
 
-You can enable PCSS with:
+Вы можете включить PCSS так:
 ```javascript
 shadowGenerator.useContactHardeningShadow = true;
 ```
 
-Here is an example of how PCSS works: https://playground.babylonjs.com/#B48X7G#2
+Вот пример того, как работает PCSS: https://playground.babylonjs.com/#B48X7G#2
 
-As PCSS requires more resources than can be available on small platform, you can use the ```filteringQuality``` property to choose the best tradeoff between quality and performances depending on your experience. (the lower the quality the better the performances).
+Поскольку PCSS требует больше ресурсов, чем может быть доступно на небольшой платформе, вы можете использовать свойство `filteringQuality`, чтобы выбрать лучший компромисс между качеством и производительностью в зависимости от вашего опыта. (чем ниже качество, тем лучше характеристики).
 
 ```javascript
 shadowGenerator.filteringQuality = BABYLON.ShadowGenerator.QUALITY_LOW;
 ```
 
-The following link gives you a good appreciation of the softening of shadows as the shadow caster moves further away from the object receiving the shadow: https://playground.babylonjs.com/#ZT8BKT#2
+Следующая ссылка дает хорошее представление о смягчении теней, когда отбрасыватель теней перемещается дальше от объекта, получающего тень.: https://playground.babylonjs.com/#ZT8BKT#2
 
-Only Point and Directional lights are currently supported by PCSS.
+В данный момент PCSS поддерживает только точечные и направленные источники света..
 
 ## Examples
 
-You can find a live example here: 
+Вы можете найти живой пример здесь: 
 https://playground.babylonjs.com/#B48X7G
 
-Please find here pictures of various filters used with a spot light:
+Здесь вы найдете фотографии различных фильтров, используемых с прожектором:
 
 ![Hard shadows](/img/how_to/hardshadows.jpg)
 
@@ -161,31 +161,30 @@ Please find here pictures of various filters used with a spot light:
 *Contact Hardening Shadow*
 
 ## Lights
-Keep in mind that this shadow generator can only be used with one light.  If you want to generate shadows from another light, then you will need to create another shadow generator.
+Имейте в виду, что этот генератор теней можно использовать только с одним источником света. Если вы хотите генерировать тени от другого источника света, то вам нужно будет создать еще один генератор теней.
 
-Only point, directional and spot lights can cast shadows.
+Только точечные, направленные и точечные источники света могут отбрасывать тени.
 
 ### Point lights
-Point lights use cubemaps rendering so please be cautious when enabling them as this could lead to some performance issues.
-You can also visit the [point light shadow map playground scene]( https://www.babylonjs-playground.com/#LYCSQ#12)
+В точечных источниках используется рендеринг кубических карт, поэтому будьте осторожны при их включении, так как это может привести к некоторым проблемам с производительностью. Вы также можете посетить [точка света карта теней игровая площадка]( https://www.babylonjs-playground.com/#LYCSQ#12)
 
-Furthermore, `BlurExponentialShadowMap` and `CloseBlurExponentialShadowMap` are not supported by point lights (mostly because blurring the six faces of the cubemap would be too expensive).
+Furthermore, `BlurExponentialShadowMap` и `CloseBlurExponentialShadowMap` не поддерживаются точечным освещением (в основном потому, что размытие шести граней кубической карты было бы слишком дорого).
 
-To optimize rendering, you can also decide to use the point light like an unlimited spot light if you are sure that all shadow casters are on the same side of the light. To do so, just specify a direction for your light and automatically Babylon.js will use a simple texture for the shadow map instead of the cubemap.
+Чтобы оптимизировать рендеринг, вы также можете использовать точечный источник света как неограниченный точечный источник света, если вы уверены, что все отбрасывателей теней находятся на одной стороне источника света. Для этого просто укажите направление для вашего источника света и автоматически Babylon.js будет использовать простую текстуру для карты теней вместо кубической карты.
 
 ### Spot lights
-Spot lights use perspective projection to compute the shadow map.
+Spot lights использует перспективную проекцию для вычисления карты теней.
 
 ### Directional lights
-Directional lights use orthogonal projection. Light's position is evaluated automatically for you to get the best shadow map possible. You can control this behavior by turning `light.autoUpdateExtends` off.
-You can control also the size of the projection window by modifying one of those properties:
-* `light.shadowOrthoScale`: 0.1 by default which means that the projection window is increase by 10% from the optimal size.
-* `light.shadowFrustumSize`: Off by default with a value of 0. You can specify a value which will be used to define the square size of the frustum to use.
+Directional lights использует ортогональную проекцию. Положение источника света оценивается автоматически, чтобы вы могли получить наилучшую возможную карту теней. Вы можете контролировать это поведение, поворачивая `light.autoUpdateExtends` off.
+Вы также можете контролировать размер окна проекции, изменив одно из этих свойств:
+* `light.shadowOrthoScale`: 0.1 по умолчанию это означает, что окно проекции увеличивается на 10% от оптимального размера.
+* `light.shadowFrustumSize`: Off по умолчанию со значением 0. Вы можете указать значение, которое будет использоваться для определения размера квадрата усеченного конуса.
 
-The light's position, as well as the positions of the mesh that you have pushed into the renderlist, determine where the shadows will appear. Note that your light point-of-view from this position have to view all meshes in the renderList; otherwise the shadows may not be rendered. See [this example](http://www.babylonjs-playground.com/#R1EVD0#3).
+Положение источника света, а также положения меша, который вы поместили в список визуализации, определяют, где будут появляться тени. Обратите внимание, что ваша легкая точка зрения с этой позиции должна просматривать все сетки в renderList; в противном случае тени могут не отображаться. See [this example](http://www.babylonjs-playground.com/#R1EVD0#3).
 
 ### Customizing the projection matrix
-All lights need to provide a projection matrix to shadow generators in order to build the shadow map. You can define your own version by setting `light.customProjectionMatrixBuilder` value:
+Все источники света должны обеспечивать проекционную матрицу для генераторов теней для построения карты теней. Вы можете определить свою собственную версию, установив `light.customProjectionMatrixBuilder` значение:
 ```
 light.customProjectionMatrixBuilder = function(viewMatrix: Matrix, renderList: Array<AbstractMesh>) {
     return BABYLON.Matrix.PerspectiveFovLH(angle, 1.0, activeCamera.minZ, this.shadowMaxZ);
@@ -193,108 +192,108 @@ light.customProjectionMatrixBuilder = function(viewMatrix: Matrix, renderList: A
 ```
 
 ## Troubleshooting
-Shadow mapping is a great technique but it is not perfect. Several parameters can be tweaked to help improving final rendering.
+Shadow Mapping - отличная техника, но она не идеальна. Несколько параметров могут быть настроены для улучшения окончательного рендеринга.
 
 ### Bias
-You may want to reduce shadow acne resulting from not precise enough shadow map. To do so, you can define the bias (which is 0.00005 by default).:
+Возможно, вы захотите уменьшить зернистость тени из-за недостаточно точной карты теней. Для этого вы можете определить смещение (по умолчанию 0,00005).:
 ```javascript
 shadowGenerator.bias = 0.01;
 ```
-Shadow generators compare the depth of every pixel with the depth of occluders (shadow casters) seen from the light point of view. As we are dealing with low precision textures (when supported Babylon.js will use float textures but low-end devices only support int textures), you may want to boost the depth of occluders to facilitate self-shadowing (An object casting shadows on itself).
+Shadow generators сравните глубину каждого пикселя с глубиной окклюдеров (теней), видимых с точки зрения света. Поскольку мы имеем дело с текстурами низкой точности (когда поддерживается Babylon.js будет использовать плавающие текстуры, но устройства низкого уровня поддерживают только текстуры int), вы можете увеличить глубину окклюдеров, чтобы упростить самозатенение (объект отбрасывает тени на себя ).
 
-### Back face rendering
-You can improve self-shadowing issues by setting `shadowGenerator.forceBackFacesOnly` to true. This will force the shadow generator to render back faces of your mesh to the shadow map. This can clearly improve the overall precision and reduce the need for a bias.
+### Рендеринг задней стороны
+Вы можете улучшить проблемы с самозатенением, установив для параметра shadowGenerator.forceBackFacesOnly значение true. Это заставит генератор теней рендерить задние грани вашей сетки на карту теней. Это может явно улучшить общую точность и уменьшить необходимость смещения.
 
-### Improving the projection matrix precision
-By default, the projection matrix of a light uses the minZ and maxZ of the main camera. But you may want to control it in order to get a more precise shadow map by reducing the distance between minZ and maxZ. To do so you can set `light.shadowMinZ` and `light.shadowMaxZ`.
+### Улучшение точности матрицы проекции
+По умолчанию матрица проецирования света использует minZ и maxZ основной камеры. Но вы можете захотеть управлять им, чтобы получить более точную карту теней, уменьшив расстояние между minZ и maxZ. Для этого вы можете установить `light.shadowMinZ` and `light.shadowMaxZ`.
 
 ### Use the best option for self-shadowing
-As mentioned earlier, if you want blurred shadows on a self-shadowing object, the best option will probably to go with close exponential shadow map.
+Как упоминалось ранее, если вы хотите размытые тени на объекте с самозатенением, лучшим вариантом будет, вероятно, пойти с близкой экспоненциальной картой теней..
 
 ### Frustum edge falloff
-Depending on how you setup your shadow generator, you could face weird falloff when an object is near the edges of the shadow map. To elegantly fix this issue, you can set a property named `frustumEdgeFalloff`:
+В зависимости от того, как вы настроили свой генератор теней, вы можете столкнуться со странным падением, когда объект находится вблизи краев карты теней. Чтобы элегантно решить эту проблему, вы можете установить свойство с именем `frustumEdgeFalloff`:
 
 ```javascript
  shadowGenerator.frustumEdgeFalloff = 1.0;
 ```
 
-You can find an example here: https://www.babylonjs-playground.com/#Y5IZCF
+Вы можете найти пример здесь: https://www.babylonjs-playground.com/#Y5IZCF
 
-This property controls the extent to which the shadows fade out at the edge of the frustum. It is used only by directional and spot lights. By default, the value is set to 0 (no falloff) and 1.0 (complete falloff).
+Это свойство контролирует степень исчезновения теней на краю усеченного конуса. Он используется только направленным и точечным освещением. По умолчанию установлено значение 0 (без спада) и 1.0 (полное спад).
 
 ### Freezing shadows in static world
 
-In case you have a static game world (objects which cast shadows) - there is no need to do the same shadow calculations 60 times per second. It could be enough to create and place a shadowMap only once. This greatly improves performance, allowing higher values of shadowMap's resolution.
+В случае, если у вас есть статичный игровой мир (объекты, которые отбрасывают тени) - нет необходимости выполнять одни и те же вычисления теней 60 раз в секунду. Этого может быть достаточно для создания и размещения карты теней только один раз. Это значительно повышает производительность, позволяя получить более высокие значения разрешения shadowMap.
 
-Shadow generators can be frozen with:
+Генераторы теней могут быть заморожены с:
 
 ```javascript
 shadowGenerator.getShadowMap().refreshRate = BABYLON.RenderTargetTexture.REFRESHRATE_RENDER_ONCE;
 ```
 
-Ask the light to not recompute shadow position with:
+Попросите свет не пересчитывать положение тени с:
 
 ```javascript
 light.autoUpdateExtends = false;
 ```
 
-### Cleaning bone matrix weights
+### Очистка матриц весов костей
 
-Wrong or imprecise bone weights of an animated mesh may cause negative or weird shadows. In this case you can clean up the weights automatically when loading with the following code:
+Неправильный или неточный вес костей анимированного меша может вызвать негативные или странные тени. В этом случае вы можете очистить веса автоматически при загрузке с помощью следующего кода:
 
 ```javascript
 BABYLON.SceneLoader.CleanBoneMatrixWeights = true;
 ```
 
-(You should set this before loading a scene or meshes.)
+(Вы должны установить это перед загрузкой сцены или мешей.)
 
 ### Self Shadow
 
-It is probably the case that Self-Shadowing requires the biggest attention during its setup. Let's try to setup self-shadowing on the following scene): https://playground.babylonjs.com/#FH3FM2#1
+Вероятно, это тот случай, когда Self-Shadowing требует наибольшего внимания при настройке. Давайте попробуем настроить самозатенение в следующей сцене): https://playground.babylonjs.com/#FH3FM2#1
 
-The first step consists in adding a shadow generator in the scene and defining every meshes as both casters and receivers (we also force the bias to 0 to highlight the generated artifacts): https://playground.babylonjs.com/#FH3FM2#4
+Первый шаг заключается в добавлении генератора теней в сцену и определении каждой сетки как в роли кастеров, так и в качестве приемников (мы также устанавливаем смещение в 0, чтобы выделить сгенерированные артефакты): https://playground.babylonjs.com/#FH3FM2#4
 
-As you can notice there are weird patterns appearing everywhere on the surface of the self-shadowed objects. This is called shadow acnea ([more information](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#shadow-acne)).
+Как вы можете заметить, на поверхности самозатененных объектов повсюду появляются странные узоры. Это называется зернистостью тени ([more information](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#shadow-acne)).
 
-Fortunately, in Babylon we do have a way to solve the issue.
+К счастью, в Babylon у нас есть способ решить проблему.
 
 #### Bias
 
-As detailed in the previous [opengl tutorial](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#shadow-acne), you can increase the value of the bias to make all the acnea disappear: https://playground.babylonjs.com/#FH3FM2#5
+Как подробно описано в предыдущем [opengl tutorial](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/#shadow-acne), Вы можете увеличить значение смещения, чтобы вся зернистость исчезла: https://playground.babylonjs.com/#FH3FM2#5
 
-Unfortunately doing this introduces another side effect called peter panning where the shadows are not attached to their objects anymore.
+К сожалению, это приводит к другому побочному эффекту, который называется панорамированием Питера, когда тени больше не прикрепляются к своим объектам..
 
 ![PeterPanning](/img/how_to/peterpanning.jpg)
 
-This is where you can benefit from a BabylonJS 3.2 feature called normal bias.
+Здесь вы можете воспользоваться функцией BabylonJS 3.2, которая называется нормальным смещением..
 
 #### Normal Bias (Since 3.2)
 
-First move back the bias to be at the limit of seeing peter panning artifacts: https://playground.babylonjs.com/#FH3FM2#6
+Сначала вернитесь назад, чтобы быть на пределе, чтобы увидеть артефакты панорамирования Питера.: https://playground.babylonjs.com/#FH3FM2#6
 
-As you notice, there is now a bit of acnea appearing on the object where the surface is parallel to the light direction:
+Как вы заметили, теперь на объекте, где поверхность параллельна направлению света, появляется немного зернистости:
 
 ![ParallelAcnea](/img/how_to/paralellacnea.jpg)
 
-This is where to add a bit of normal bias. Basically, during the generation of the shadow map, this will inset the geometry in the direction of the normal where the surface is parallel to the light: https://playground.babylonjs.com/#FH3FM2#7
+Это где добавить немного нормального смещения. В основном, во время генерации карты теней, это вставит геометрию в направлении нормали, где поверхность параллельна свету.: https://playground.babylonjs.com/#FH3FM2#7
 
-All the artifacts are now gone and it is time to make our shadows look awesome.
+Все артефакты исчезли, и пришло время, чтобы наши тени выглядели потрясающе.
 
-#### Soft Shadows
+#### Мягкие тени
 
-Try to change the shadow generator to Contact hardening: https://playground.babylonjs.com/#FH3FM2#8
+Попробуй поменять генератор теней на Закалку контактов: https://playground.babylonjs.com/#FH3FM2#8
 
-At first, you cannot see the contact hardening effect and, not only this, you can see shadow acnea again. Taking note of the section on PCSS you realize that the light min and max should be set as close as possible: https://playground.babylonjs.com/#FH3FM2#10
+Сначала вы не можете видеть эффект затвердевания контактов, и, не только это, вы можете снова увидеть теневые угри. Принимая во внимание раздел о PCSS, вы понимаете, что минимальное и максимальное значения света должны быть установлены как можно ближе: https://playground.babylonjs.com/#FH3FM2#10
 
-Now the contact hardening effect is present but the acnea is even stronger. Unfortunately, the bias is applied on the normalized coordinates depth (0-1) so changing the near and far value of the light impacts how big the bias should be.
+Теперь эффект контактного отверждения присутствует, но акне еще сильнее. К сожалению, смещение применяется к нормализованной глубине координат (0-1), поэтому изменение ближнего и дальнего значения света влияет на то, насколько большим должно быть смещение.
 
-So, go back and change the bias to its maximum before seeing peter panning and then apply some normal bias to remove the rest of the acnea leads to the following result: https://playground.babylonjs.com/#FH3FM2#11
+Итак, вернитесь назад и измените смещение до максимума, прежде чем увидеть пантерирование Питера, а затем примените некоторое нормальное смещение для удаления остальной части акне, что приводит к следующему результату: https://playground.babylonjs.com/#FH3FM2#11
 
-Your shadows are now soft without acnea or peter panning.
+Ваши тени теперь мягкие, без акне и пантеры.
 
 ### Custom shadow map shaders
 
-Starting with Babylon.js v4.0, you can specify your own shader to render shadow maps. To define that shader you can use the `shaddowGenerator.customShaderOption` property:
+Начиная с Babylon.js v4.0, вы можете указать свой собственный шейдер для рендеринга карт теней. Чтобы определить этот шейдер, вы можете использовать свойство `shaddowGenerator.customShaderOption`:
 
 ```
 shadowGenerator.customShaderOptions = {  
@@ -303,19 +302,19 @@ shadowGenerator.customShaderOptions = {
 }
 ```
 
-The only required value is shaderName. But you can also add:
-- attributes: used to specify additional attributes you need in your shader
-- uniforms: used to specify additional uniforms you need in your shader
-- samplers: used to specify additional samplers you need in your shader
-- defines: used to specify additional defines you need in your shader
+Единственное обязательное значение - shaderName. Но вы также можете добавить:
+- attributes: используется для указания дополнительных атрибутов, которые вам нужны в вашем шейдере
+- uniforms: используется для указания дополнительных униформ, которые вам нужны в вашем шейдере
+- samplers: используется для указания дополнительных сэмплеров, которые вам нужны в вашем шейдере
+- defines: используется для указания дополнительных определений, которые вам нужны в вашем шейдере
 
-The shadow map generation is a complex task and requires to take in account several defines (like the type of the shadow map between int and float, or the need for alpha test). It is recommended to check the current default shaders here:
+Генерация карты теней является сложной задачей и требует учета нескольких определений (например, типа карты теней между int и float или необходимости альфа-теста). Рекомендуется проверить текущие шейдеры по умолчанию здесь:
 - Vertex:https://github.com/BabylonJS/Babylon.js/blob/master/src/Shaders/shadowMap.vertex.fx
 - Fragment: https://github.com/BabylonJS/Babylon.js/blob/master/src/Shaders/shadowMap.fragment.fx
 
-In order to update your own uniforms, you can rely on `shadowGenerator.onBeforeShadowMapRenderObservable` observable. This will be called for you everytime the shadow map will be rendered and it will give you the current compiled effect.
+Для того, чтобы обновить ваши собственные формы, вы можете положиться на наблюдаемый `shadowGenerator.onBeforeShadowMapRenderObservable`. Это будет вызываться для вас каждый раз, когда будет отображаться карта теней, и это даст вам текущий скомпилированный эффект.
 
-You can find a complete example here: https://www.babylonjs-playground.com/#IJH4VG#0
+Вы можете найти полный пример здесь: https://www.babylonjs-playground.com/#IJH4VG#0
 
 ## Next step
-Now that you are becoming a real professional about Babylon.js, maybe it’s time to go deeper into the code to manipulate complex shaders, mesh, or textures. Our [home menu for our wiki](/) is your portal to many advanced topics. You can also participate in this project by going to our Github page: [https://github.com/BabylonJS/Babylon.js](https://github.com/BabylonJS/Babylon.js) and also by participating in our very active forum: [https://forum.babylonjs.com](https://forum.babylonjs.com). See you there.
+Теперь, когда вы стали настоящим профессионалом в Babylon.js, возможно, пришло время углубиться в код для управления сложными шейдерами, мешами или текстурами. Our [home menu for our wiki](/) Ваш портал для многих продвинутых тем. Вы также можете принять участие в этом проекте, перейдя на нашу страницу Github: [https://github.com/BabylonJS/Babylon.js](https://github.com/BabylonJS/Babylon.js) а также участвуя в нашем очень активном форуме: [https://forum.babylonjs.com](https://forum.babylonjs.com). See you there.

@@ -2,9 +2,9 @@
 ID_PAGE: 22141
 PG_TITLE: 16. Height Map
 ---
-## Introduction
+## Введение
 
-In this tutorial, our goal is to understand height maps, and to learn how to generate realistic grounds.
+В этом уроке наша цель - понять карты высот и научиться создавать реалистичную землю.
 
 ![HeightMap](/img/how_to/HeightMap/14.png)
 
@@ -13,18 +13,18 @@ _Final result_
 ## How can I do this ?
 
 * **Introduction**
-  Those mountains are very easy to generate with Babylon.js, and with only a single function. But before we do that, we have to create a new material, like we have done many times before:
+  Эти горы очень легко генерировать с помощью Babylon.js и только с одной функцией. Но прежде чем мы это сделаем, мы должны создать новый материал, как мы делали много раз прежде:
 
   ```javascript
-  // Create a material with our land texture.
+  // Создайте материал с нашей текстурой земли.
   var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
   groundMaterial.diffuseTexture = new BABYLON.Texture("Earth__land.jpg", scene);
 
-  // This shows how we would apply this material to a plane. In our later
-  // example we'll replace this with CreateGroundFromHeightMap.
+  // Это показывает, как мы применили бы этот материал к плоскости. 
+  // В нашем последнем примере мы заменим это CreateGroundFromHeightMap.
   var groundPlane = BABYLON.Mesh.CreatePlane("groundPlane", 200.0, scene);
 
-  // When our new mesh is read, apply our material.
+  // Когда наша новая сетка будет прочитана, примените наш материал.
   groundPlane.material = groundMaterial;
   ```
 
@@ -34,57 +34,56 @@ _Our material, a texture, applied to the plane_
 
 * **Explanations of a height map**
 
-  Understanding height maps is the main objective of this tutorial. A height map is simply a grayscale image like the one we are going to use:
+  Понимание карт высот является основной целью этого урока. Карта высот - это просто изображение в градациях серого, подобное тому, которое мы будем использовать:
 
   ![HeightMap3](/img/how_to/HeightMap/worldHeightMap.jpg)
 
-  This image will now be used to generate our ground, using the different variants of gray of our picture. This image is the elevation data for your ground. Each pixel’s color is interpreted as a distance of displacement or “height” from the “floor” of your mesh. So, the whiter the pixel is, the taller your mountain will be.
+  Это изображение теперь будет использоваться для создания нашей земли, используя различные варианты серого нашей картины. Это изображение является данными высоты для вашей местности. Цвет каждого пикселя интерпретируется как расстояние смещения или «высота» от «пола» вашей сетки. Итак, чем белее пиксель, тем выше будет ваша гора.
 
-  To help you generate those grayscale height maps, you can use software such as “Terragen”, or ”Picogen”.
+  Чтобы помочь вам создать эти карты высоты оттенков серого, вы можете использовать программное обеспечение, такое как “Terragen”, или ”Picogen”.
 
 * **Javascript code**
-  Now let’s see this powerful function named “CreateGroundFromHeightMap”:
+  Теперь давайте посмотрим на эту мощную функцию с именем “CreateGroundFromHeightMap”:
   ```javascript
-  // Create a material with our land texture.
+  // Создайте материал с нашей текстурой земли.
   var groundMaterial = new BABYLON.StandardMaterial("ground", scene);
   groundMaterial.diffuseTexture = new BABYLON.Texture("Earth__land.jpg", scene);
 
-  // Use CreateGroundFromHeightMap to create a height map of 200 units by 200
-  // units, with 250 subdivisions in each of the `x` and `z` directions, for a
-  // total of 62,500 divisions.
+  // Используйте CreateGroundFromHeightMap, чтобы создать карту высот 200 единиц на 200
+  // единиц, с 250 подразделения в каждом из `x` и `z` направлениях, общим числом 62,500 разбиений.
   var ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", "worldHeightMap.jpg", 200, 200, 250, 0, 10, scene, false, successCallback);
 
-  // When our new mesh is read, apply our material.
+  // Когда наша новая сетка будет создана, применим наш материал.
   ground.material = groundMaterial;
   ```
   
-  There are many parameters here:
+  Здесь много параметров:
   * _Name_
   * _Height map picture url_
   * _Width of mesh_
   * _Height of mesh_
-  * _Number of subdivisions_: increase the complexity of this mesh in order to improve the visual quality of the result
+  * _Number of subdivisions_: увеличить сложность этой меша, чтобы улучшить визуальное качество результата
 
   ![HeightMap4](/img/how_to/HeightMap/14-2.png)
 
-  * _Minimum height_ : The lowest level of the mesh
-  * _Maximum height_ : the highest level of the mesh
+  * _Minimum height_ : Самый низкий уровень меша
+  * _Maximum height_ : самый высокий уровень меша
   * _Scene_: the actual scene
-  * _Updatable_: indicates if this mesh can be updated dynamically in the future (Boolean)
-  * _successCallback_ : will be called after the height map was created and the vertex data is created. It is a function with the mesh as its first variable.
+  * _Updatable_: указывает, может ли эта сетка динамически обновляться в будущем (Boolean)
+  * _successCallback_ : будет вызван после создания карты высот и создания данных вершин. Это функция с сеткой в ​​качестве первой переменной.
 
-  Now we have a beautiful 3D view of the earth!
+  Теперь у нас есть прекрасный трехмерный вид на Землю!
 
   ![HeightMap4](/img/how_to/HeightMap/14-3.png)
 
-  In my example, I have added a skybox (like we have learned before [here](/How_To/Environment)), and a spotlight to simulate sun activity.
+  В моем примере я добавил скайбокс (как мы узнали ранее [here](/How_To/Environment)), и прожектор для имитации солнечной активности.
 
-  Here is another example showing what you can achieve with BabylonJS height maps:
+  Вот еще один пример, показывающий, чего вы можете достичь с помощью карт высот BabylonJS:
 
   ![HeightMap5](/img/how_to/HeightMap/14-4.png)
 
 * **Tips**
-  When the user is manipulating the camera, it can be awkward if they can see under the ground, or if they zoom-out outside the skybox. So, to avoid that kind of situation, we can constrain the camera movement:
+  Когда пользователь манипулирует камерой, может быть неловко, если они могут видеть под землей или если они уменьшают изображение за пределами скайбокса. Итак, чтобы избежать такой ситуации, мы можем ограничить движение камеры:
 
   ```javascript
   var camerasBorderFunction = function () {
@@ -105,7 +104,7 @@ _Our material, a texture, applied to the plane_
       scene.registerBeforeRender(camerasBorderFunction);
   ```
 
-You may be interested in visiting [**the playground demo**]( https://www.babylonjs-playground.com/?14) that goes with this tutorial.
+Вы можете быть заинтересованы в посещении [**the playground demo**]( https://www.babylonjs-playground.com/?14) что идет с этим уроком.
 
 ## Next step
-Well done! Your scene looks good now, and you can imagine a lot of new landscapes! One more important thing you need to know is [how to create shadows](/babylon101/Shadows). Shadows will give your scene a beautiful rendering effect, so don't forget about them!
+Отлично сработано! Теперь ваша сцена выглядит хорошо, и вы можете представить множество новых пейзажей! Еще одна важная вещь, которую вам нужно знать,[как создавать тени](/babylon101/Shadows). Тени придадут вашей сцене прекрасный эффект рендеринга, поэтому не забывайте о них!
